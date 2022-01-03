@@ -1,7 +1,7 @@
 {
   "framework": "vue",
-  "name": "@tager/admin-pages",
-  "version": "0.3.29",
+  "name": "@tager/admin-cron",
+  "version": "0.0.1",
   "contributions": {
     "html": {
       "description-markup": "markdown",

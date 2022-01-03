@@ -7,5 +7,4 @@ i18n.addTranslations('en', 'pages', EN);
 i18n.addTranslations('ru', 'pages', RU);
 
 export * from './constants/routes';
-export * from './utils/paths';
 export * from './services/requests';

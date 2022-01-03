@@ -11,13 +11,21 @@ import EN from './locales/en';
 import RU from './locales/ru';
 import config from './config/config.json';
 import App from './views/App.vue';
-import { PAGE_FORM_ROUTE, PAGE_LIST_ROUTE } from './constants/routes';
+import {
+  PAGE_COMMANDS_ROUTE,
+  PAGE_CRON_LOGS_ROUTE,
+  PAGE_COMMANDS_LOGS_ROUTE,
+} from './constants/routes';
 
 configStore.setConfig(config);
 
 const router = createRouter(
   {
-    routes: [PAGE_LIST_ROUTE, PAGE_FORM_ROUTE],
+    routes: [
+      PAGE_COMMANDS_ROUTE,
+      PAGE_CRON_LOGS_ROUTE,
+      PAGE_COMMANDS_LOGS_ROUTE,
+    ],
   },
   { useTitleSync: false }
 );
