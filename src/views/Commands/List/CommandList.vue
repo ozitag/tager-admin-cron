@@ -25,7 +25,7 @@
         >
       </div>
     </div>
-    <div v-if="response" class="response" v-html="response"></div>
+    <CronScreen v-if="response" :content="response" :use-html="true" />
   </page>
 </template>
 
@@ -43,11 +43,13 @@ import { useResource } from '@tager/admin-services';
 
 import { executeCommand, getCommandsList } from '../../../services/requests';
 import CronSelect from '../../../components/CronSelect';
+import CronScreen from '../../../components/CronScreen';
 
 export default defineComponent({
   name: 'CommandList',
   components: {
     CronSelect,
+    CronScreen,
   },
   setup(props, context) {
     const response = ref<string | null>(null);
