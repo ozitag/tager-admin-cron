@@ -1,31 +1,37 @@
 <template>
-  <page :title="t('pages:commandsLogs')">
+  <page :title="t('pages:commandLogDetails') + (log ? ' ID ' + log.id : '')">
     <div v-if="log">
-      <div>
-        <span>{{ t('pages:command') }}: </span>
-        <b>{{ log.signature }}</b>
-      </div>
-      <div>
-        <span>{{ t('pages:arguments') }}: </span>
-        <div>
-          <div v-for="(val, key) in log.arguments" :key="key" class="argument">
-            <div class="argument_name">{{ key }}:</div>
-            <div v-if="val" class="argument_value">{{ val }}</div>
-            <div v-else class="argument_null"></div>
-          </div>
-        </div>
-      </div>
-      <div>
-        <span>{{ t('pages:executionTime') }}: </span>
-        <b>{{ log.execution_time }}</b>
-      </div>
-      <div>
-        <span>{{ t('pages:user') }}: </span>
-        <b>{{ log.user ? log.user.name : '' }}</b>
-      </div>
-      <div>
-        <span>{{ t('pages:createdAt') }}: </span>
-        <b v-if="log.created_at">{{
+      <field-value
+        :label="t('pages:command')"
+        type="text"
+        :text="log.signature"
+      />
+      <field-value
+        :label="t('pages:executionTime')"
+        type="text"
+        :text="log.execution_time + ' ' + t('pages:secondShort')"
+      />
+      <field-value
+        v-if="log.user"
+        :label="t('pages:user')"
+        type="text"
+        :text="log.user ? log.user.name : ''"
+      />
+      <field-value
+        :label="t('pages:status')"
+        type="text"
+        :text="getStatusLabel(log.status)"
+      />
+      <field-value
+        :label="t('pages:status')"
+        type="text"
+        :text="getStatusLabel(log.status)"
+      />
+      <field-value
+        v-if="log.created_at"
+        :label="t('pages:createdAt')"
+        type="text"
+        :text="
           new Date(log.created_at).toLocaleDateString('ru-RU', {
             year: 'numeric',
             month: 'long',
@@ -34,18 +40,23 @@
             minute: 'numeric',
             second: 'numeric',
           })
-        }}</b>
-      </div>
-      <div>
-        <b v-if="log.status" :class="['status', getStatusLabel(log.status)]">{{
-          getStatusLabel(log.status)
-        }}</b>
+        "
+      />
+      <div class="arguments_wrap">
+        <span class="arguments_title">{{ t('pages:arguments') }}: </span>
+        <div>
+          <div v-for="(val, key) in log.arguments" :key="key" class="argument">
+            <div class="argument_name">{{ key }}:</div>
+            <div v-if="val" class="argument_value">{{ val }}</div>
+            <div v-else class="argument_null"></div>
+          </div>
+        </div>
       </div>
 
       <cron-screen
         v-if="log.output"
         :content="log.output"
-        title="Output:"
+        :title="t('pages:outputRes')"
         :use-html="true"
       />
     </div>
@@ -110,6 +121,13 @@ export default defineComponent({
   &.started {
     background: #9f9f9f;
   }
+}
+.arguments_title {
+  margin-bottom: 14px;
+  display: block;
+}
+.arguments_wrap {
+  margin-bottom: 20px;
 }
 .argument {
   display: flex;

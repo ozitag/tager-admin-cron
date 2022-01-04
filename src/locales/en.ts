@@ -5,11 +5,12 @@ const EN = {
   viewPage: 'View Page',
   cron: 'Commands',
   cronLogs: 'Cron Logs',
-  cronLogDetails: 'Cron Log Details',
+  cronLogDetails: 'Cron Log',
   commandsLogs: 'Commands Logs',
-  commandLogDetails: 'Command Log Details',
+  commandLogDetails: 'Command Log',
   commands: 'Commands List',
   view: 'View',
+  secondShort: 'sec.',
 
   command: 'Command',
   class: 'Class Name',
@@ -31,6 +32,8 @@ const EN = {
 
   success: 'Success',
   error: 'Error',
+  outputRes: 'Output:',
+  outputError: 'Error:',
 
   execSuccessMessage: 'Command executed',
   execErrorMessage: 'Command execution failed',

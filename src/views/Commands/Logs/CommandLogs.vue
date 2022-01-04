@@ -27,9 +27,18 @@
           <div v-else class="argument_null"></div>
         </div>
       </template>
-      <template v-slot:cell(hasoutput)="{ row }">
-        <base-button v-if="row.hasoutput" :href="getCommandDetailsUrl(row.id)">
-          {{ t('pages:view') }}
+      <template v-slot:cell(execution-time)="{ row }">
+        <span v-if="row.execution_time"
+          >{{ row.execution_time }} {{ t('pages:secondShort') }}</span
+        >
+      </template>
+      <template v-slot:cell(actions)="{ row }">
+        <base-button
+          variant="icon"
+          :title="t('pages:view')"
+          :href="getCommandDetailsUrl(row.id)"
+        >
+          <EyeIcon />
         </base-button>
       </template>
     </data-table>
@@ -60,6 +69,7 @@ import { getCommandsList, getCommandsLogs } from '../../../services/requests';
 import { CommandLogShort } from '../../../typings/model';
 import CronSelect from '../../../components/CronSelect';
 import { getCommandDetailsUrl } from '../../../utils/paths';
+import EyeIcon from '../../../components/EyeIcon/EyeIcon.vue';
 
 const getStatusLabel = (label: string): string => {
   switch (label) {
@@ -76,6 +86,7 @@ export default defineComponent({
   name: 'CommandLogs',
   components: {
     CronSelect,
+    EyeIcon,
   },
   setup(props, context) {
     const { t } = useTranslation(context);
@@ -185,9 +196,11 @@ export default defineComponent({
         field: 'user.name',
       },
       {
-        id: 7,
-        name: t('pages:output'),
-        field: 'hasoutput',
+        id: 6,
+        name: '',
+        field: 'actions',
+        style: { whiteSpace: 'nowrap', width: '40px' },
+        headStyle: { whiteSpace: 'nowrap', width: '40px' },
       },
     ];
 

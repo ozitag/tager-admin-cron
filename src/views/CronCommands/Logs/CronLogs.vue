@@ -24,12 +24,14 @@
           </base-button>
         </div>
       </template>
-      <template v-slot:cell(haserror)="{ row }">
-        <div>
-          <base-button v-if="row.haserror" :href="getCronDetailsUrl(row.id)">
-            {{ t('pages:view') }}
-          </base-button>
-        </div>
+      <template v-slot:cell(actions)="{ row }">
+        <base-button
+          variant="icon"
+          :title="t('pages:view')"
+          :href="getCronDetailsUrl(row.id)"
+        >
+          <EyeIcon />
+        </base-button>
       </template>
     </data-table>
   </page>
@@ -49,10 +51,12 @@ import { CronLogShort } from '../../../typings/model';
 import CronSelect from '../../../components/CronSelect';
 import { getCronDetailsUrl } from '../../../utils/paths';
 import { getStatusLabel } from '../../../utils/helper';
+import EyeIcon from '../../../components/EyeIcon/EyeIcon.vue';
 
 export default defineComponent({
   name: 'CronLogs',
   components: {
+    EyeIcon,
     CronSelect,
   },
   setup(props, context) {
@@ -83,8 +87,8 @@ export default defineComponent({
     const columnDefs: Array<ColumnDefinition<any>> = [
       {
         id: 1,
-        name: t('pages:class'),
-        field: 'class',
+        name: t('pages:command'),
+        field: 'command',
       },
       {
         id: 3,
@@ -96,6 +100,7 @@ export default defineComponent({
         id: 4,
         name: t('pages:endAt'),
         field: 'end_at',
+        type: 'datetime',
       },
       {
         id: 5,
@@ -104,13 +109,10 @@ export default defineComponent({
       },
       {
         id: 6,
-        name: t('pages:commandError'),
-        field: 'haserror',
-      },
-      {
-        id: 7,
-        name: t('pages:output'),
-        field: 'hasoutput',
+        name: '',
+        field: 'actions',
+        style: { whiteSpace: 'nowrap', width: '40px' },
+        headStyle: { whiteSpace: 'nowrap', width: '40px' },
       },
     ];
 

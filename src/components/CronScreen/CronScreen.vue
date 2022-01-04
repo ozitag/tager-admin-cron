@@ -100,12 +100,13 @@ export default {
     overflow-y: scroll;
     border-radius: 0 0 5px 5px;
     margin: 0 auto;
-    padding: 1px;
+    padding: 10px;
     white-space: pre;
   }
 
   .pre_res {
     color: #fff;
+    padding-bottom: 5px;
   }
 
   color: #fff;

@@ -6,12 +6,13 @@ const RU: typeof EN = {
   createPage: 'Create page',
   viewPage: 'View Page',
   cron: 'Команды',
-  cronLogs: 'Логи крон-команд',
+  cronLogs: 'Cron Логи',
   commandsLogs: 'Логи команд',
-  cronLogDetails: 'Лог крон-команды',
+  cronLogDetails: 'Лог команды',
   commands: 'Список команд',
   commandLogDetails: 'Лог команды',
   view: 'Подробнее',
+  secondShort: 'сек.',
 
   command: 'Команда',
   class: 'Класс',
@@ -33,6 +34,8 @@ const RU: typeof EN = {
 
   success: 'Успешно',
   error: 'Ошибка',
+  outputRes: 'Результат:',
+  outputError: 'Ошибки:',
 
   execSuccessMessage: 'Команда выполнена',
   execErrorMessage: 'Команда не выполнена',

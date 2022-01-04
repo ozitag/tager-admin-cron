@@ -37,7 +37,7 @@ const router = createRouter(
 i18n.addTranslations('en', 'pages', EN);
 i18n.addTranslations('ru', 'pages', RU);
 
-i18n.init({ debug: false, lng: 'en' }).then(() => {
+i18n.init({ debug: false, lng: 'ru' }).then(() => {
   Vue.use(VueCompositionApi);
 
   const app = createApp({

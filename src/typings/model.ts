@@ -16,7 +16,7 @@ export interface CommandLog extends CommandLogShort {
 
 export interface CronLogShort {
   readonly id: number;
-  readonly class: string;
+  readonly command: string;
   readonly status: string;
   readonly begin_at: string;
   readonly end_at: string;
@@ -31,7 +31,7 @@ export interface CronLogShort {
 export interface CronLog extends CronLogShort {
   readonly error: string | null;
   readonly output: string | null;
-  readonly command: string;
+  readonly class: string;
 }
 
 export interface Command {

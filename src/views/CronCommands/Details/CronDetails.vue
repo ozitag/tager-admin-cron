@@ -1,17 +1,16 @@
 <template>
-  <page :title="t('pages:cronLogs')">
+  <page :title="t('pages:commandLogDetails') + (log ? ' ID ' + log.id : '')">
     <div v-if="log">
-      <div>
-        <span>{{ t('pages:command') }}: </span>
-        <b>{{ log.command }}</b>
-      </div>
-      <div>
-        <span>{{ t('pages:class') }}: </span>
-        <b>{{ log.class }}</b>
-      </div>
-      <div>
-        <span>{{ t('pages:beginAt') }}: </span>
-        <b v-if="log.begin_at">{{
+      <field-value
+        :label="t('pages:command')"
+        type="text"
+        :text="log.command"
+      />
+      <field-value :label="t('pages:class')" type="text" :text="log.class" />
+      <field-value
+        :label="t('pages:beginAt')"
+        type="text"
+        :text="
           new Date(log.begin_at).toLocaleDateString('ru-RU', {
             year: 'numeric',
             month: 'long',
@@ -20,11 +19,12 @@
             minute: 'numeric',
             second: 'numeric',
           })
-        }}</b>
-      </div>
-      <div>
-        <span>{{ t('pages:endAt') }}: </span>
-        <b v-if="log.end_at">{{
+        "
+      />
+      <field-value
+        :label="t('pages:endAt')"
+        type="text"
+        :text="
           new Date(log.end_at).toLocaleDateString('ru-RU', {
             year: 'numeric',
             month: 'long',
@@ -33,20 +33,24 @@
             minute: 'numeric',
             second: 'numeric',
           })
-        }}</b>
-      </div>
-      <div>
-        <b v-if="log.status" :class="['status', getStatusLabel(log.status)]">{{
-          getStatusLabel(log.status)
-        }}</b>
-      </div>
+        "
+      />
+      <field-value
+        :label="t('pages:status')"
+        type="text"
+        :text="getStatusLabel(log.status)"
+      />
 
-      <cron-screen v-if="log.output" :content="log.output" title="Output:" />
+      <cron-screen
+        v-if="log.output"
+        :content="log.output"
+        :title="t('pages:outputRes')"
+      />
       <cron-screen
         v-if="log.error"
         :content="log.error"
         type="danger"
-        title="Error:"
+        :title="t('pages:outputError')"
       />
     </div>
   </page>
