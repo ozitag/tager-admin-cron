@@ -47,7 +47,7 @@ import {computed, defineComponent, onMounted} from '@vue/composition-api';
 import {
   useTranslation,
 } from '@tager/admin-ui';
-import { useResource } from '@tager/admin-services';
+import {Nullable, useResource} from '@tager/admin-services';
 
 import { getCronLogDetails } from '../../../services/requests';
 import { CronLog } from '../../../typings/model';
@@ -61,12 +61,12 @@ export default defineComponent({
   },
   setup(props, context) {
     const { t } = useTranslation(context);
-    const id = computed<number>(() => context.root.$route.params.id);
+    const id = computed<string>(() => context.root.$route.params.id);
 
     const [fetchPost, { data: log }] = useResource<
       Nullable<CronLog>
     >({
-      fetchResource: () => getCronLogDetails(id.value),
+      fetchResource: () => getCronLogDetails(Number(id.value)),
       initialValue: null,
       context,
       resourceName: 'Post',
