@@ -27,8 +27,10 @@
           <div v-else class="argument_null"></div>
         </div>
       </template>
-      <template v-slot:cell(output)="{ row }">
-        <div v-html="row.output"></div>
+      <template v-slot:cell(hasoutput)="{ row }">
+        <base-button v-if="row.hasoutput" :href="getCommandDetailsUrl(row.id)">
+          {{ t('pages:view') }}
+        </base-button>
       </template>
     </data-table>
   </page>
@@ -54,9 +56,10 @@ import {
 } from '@tager/admin-ui';
 import { useResource } from '@tager/admin-services';
 
-import { getCommandsList, getCommandsLogs } from '../services/requests';
-import { CommandLog } from '../typings/model';
-import CronSelect from '../components/CronSelect';
+import { getCommandsList, getCommandsLogs } from '../../../services/requests';
+import { CommandLogShort } from '../../../typings/model';
+import CronSelect from '../../../components/CronSelect';
+import {getCommandDetailsUrl} from "../../../utils/paths";
 
 const getStatusLabel = (label: string): string => {
   switch (label) {
@@ -120,7 +123,7 @@ export default defineComponent({
       pageSize,
       pageCount,
       pageNumber,
-    } = useDataTable<CommandLog>({
+    } = useDataTable<CommandLogShort>({
       fetchEntityList: (params) => {
         return getCommandsLogs({
           query: params.searchQuery,
@@ -184,7 +187,7 @@ export default defineComponent({
       {
         id: 7,
         name: t('pages:output'),
-        field: 'output',
+        field: 'hasoutput',
       },
     ];
 
@@ -201,6 +204,7 @@ export default defineComponent({
       commandFilter,
       commandsList,
       getStatusLabel,
+      getCommandDetailsUrl,
       t,
     };
   },

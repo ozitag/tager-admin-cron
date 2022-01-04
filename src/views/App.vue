@@ -10,7 +10,7 @@ import { defineComponent, SetupContext } from '@vue/composition-api';
 import { useTranslation } from '@tager/admin-ui';
 import { MenuItemType } from '@tager/admin-layout';
 
-import { PAGES_ROUTE_PATHS } from '../constants/paths';
+import { getCommandsListUrl, getCommandsLogs, getCronLogsUrl } from "../utils/paths";
 
 export default defineComponent({
   name: 'App',
@@ -25,13 +25,13 @@ export default defineComponent({
         children: [
           {
             text: t('pages:commands'),
-            url: PAGES_ROUTE_PATHS.PAGE_COMMANDS,
+            url: getCommandsListUrl(),
           },
           {
             text: t('pages:commandsLogs'),
-            url: PAGES_ROUTE_PATHS.PAGE_COMMANDS_LOGS,
+            url: getCommandsLogs(),
           },
-          { text: t('pages:cronLogs'), url: PAGES_ROUTE_PATHS.PAGE_CRON_LOGS },
+          { text: t('pages:cronLogs'), url: getCronLogsUrl() },
         ],
       },
     ];

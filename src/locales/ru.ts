@@ -7,8 +7,11 @@ const RU: typeof EN = {
   viewPage: 'View Page',
   cron: 'Команды',
   cronLogs: 'Логи крон-команд',
-  commandsLogs: 'Логи команлд',
+  commandsLogs: 'Логи команд',
+  cronLogDetails: 'Лог крон-команды',
   commands: 'Список команд',
+  commandLogDetails: 'Лог команды',
+  view: 'Подробнее',
 
   command: 'Команда',
   class: 'Класс',

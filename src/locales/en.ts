@@ -5,8 +5,11 @@ const EN = {
   viewPage: 'View Page',
   cron: 'Commands',
   cronLogs: 'Cron Logs',
+  cronLogDetails: 'Cron Log Details',
   commandsLogs: 'Commands Logs',
+  commandLogDetails: 'Command Log Details',
   commands: 'Commands List',
+  view: 'View',
 
   command: 'Command',
   class: 'Class Name',

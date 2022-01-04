@@ -41,8 +41,8 @@ import {
 import { useTranslation } from '@tager/admin-ui';
 import { useResource } from '@tager/admin-services';
 
-import { executeCommand, getCommandsList } from '../services/requests';
-import CronSelect from '../components/CronSelect';
+import { executeCommand, getCommandsList } from '../../../services/requests';
+import CronSelect from '../../../components/CronSelect';
 
 export default defineComponent({
   name: 'CommandList',

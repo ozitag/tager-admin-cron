@@ -17,11 +17,19 @@
           {{ getStatusLabel(row.status) }}
         </div>
       </template>
-      <template v-slot:cell(output)="{ row }">
-        <div v-html="row.output"></div>
+      <template v-slot:cell(hasoutput)="{ row }">
+        <div>
+          <base-button v-if="row.hasoutput" :href="getCronDetailsUrl(row.id)">
+            {{ t('pages:view') }}
+          </base-button>
+        </div>
       </template>
-      <template v-slot:cell(error)="{ row }">
-        <div v-html="row.error"></div>
+      <template v-slot:cell(haserror)="{ row }">
+        <div>
+          <base-button v-if="row.haserror" :href="getCronDetailsUrl(row.id)">
+            {{ t('pages:view') }}
+          </base-button>
+        </div>
       </template>
     </data-table>
   </page>
@@ -36,20 +44,11 @@ import {
   useTranslation,
 } from '@tager/admin-ui';
 
-import { getCronLogs } from '../services/requests';
-import { CommandLog } from '../typings/model';
-import CronSelect from '../components/CronSelect';
-
-const getStatusLabel = (label: string): string => {
-  switch (label) {
-    case 'STARTED':
-      return 'started';
-    case 'FAILED':
-      return 'failed';
-    default:
-      return 'finished';
-  }
-};
+import { getCronLogs } from '../../../services/requests';
+import { CronLogShort } from '../../../typings/model';
+import CronSelect from '../../../components/CronSelect';
+import {getCronDetailsUrl} from "../../../utils/paths";
+import {getStatusLabel} from "../../../utils/helper";
 
 export default defineComponent({
   name: 'CronLogs',
@@ -67,7 +66,7 @@ export default defineComponent({
       pageSize,
       pageCount,
       pageNumber,
-    } = useDataTable<CommandLog>({
+    } = useDataTable<CronLogShort>({
       fetchEntityList: (params) => {
         return getCronLogs({
           query: params.searchQuery,
@@ -82,11 +81,6 @@ export default defineComponent({
     });
 
     const columnDefs: Array<ColumnDefinition<any>> = [
-      {
-        id: 0,
-        name: t('pages:command'),
-        field: 'command',
-      },
       {
         id: 1,
         name: t('pages:class'),
@@ -111,12 +105,12 @@ export default defineComponent({
       {
         id: 6,
         name: t('pages:commandError'),
-        field: 'error',
+        field: 'haserror',
       },
       {
         id: 7,
         name: t('pages:output'),
-        field: 'output',
+        field: 'hasoutput',
       },
     ];
 
@@ -131,6 +125,7 @@ export default defineComponent({
       pageCount,
       pageNumber,
       getStatusLabel,
+      getCronDetailsUrl,
       t,
     };
   },
@@ -156,26 +151,6 @@ export default defineComponent({
   }
   &.started {
     background: #9f9f9f;
-  }
-}
-.argument {
-  display: flex;
-  margin: 0px 5px 5px 0px;
-
-  .argument_name {
-    background: #f7f7f7;
-    padding: 2px;
-    border-radius: 4px 0px 0px 4px;
-  }
-  .argument_value {
-    background: #ececec;
-    padding: 2px;
-    border-radius: 0px 4px 4px 0px;
-  }
-  .argument_null {
-    background: #fcc;
-    padding: 2px;
-    border-radius: 0px 4px 4px 0px;
   }
 }
 </style>
