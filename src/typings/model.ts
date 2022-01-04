@@ -10,7 +10,7 @@ export interface CommandLogShort {
     name: string;
   };
 }
-export interface CommandLog extends CommandLogShort{
+export interface CommandLog extends CommandLogShort {
   readonly output: string | null;
 }
 
@@ -28,7 +28,7 @@ export interface CronLogShort {
     name: string;
   };
 }
-export interface CronLog extends CronLogShort{
+export interface CronLog extends CronLogShort {
   readonly error: string | null;
   readonly output: string | null;
   readonly command: string;

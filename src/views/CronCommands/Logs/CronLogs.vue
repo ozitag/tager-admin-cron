@@ -47,8 +47,8 @@ import {
 import { getCronLogs } from '../../../services/requests';
 import { CronLogShort } from '../../../typings/model';
 import CronSelect from '../../../components/CronSelect';
-import {getCronDetailsUrl} from "../../../utils/paths";
-import {getStatusLabel} from "../../../utils/helper";
+import { getCronDetailsUrl } from '../../../utils/paths';
+import { getStatusLabel } from '../../../utils/helper';
 
 export default defineComponent({
   name: 'CronLogs',

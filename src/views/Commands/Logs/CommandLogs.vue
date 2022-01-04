@@ -59,7 +59,7 @@ import { useResource } from '@tager/admin-services';
 import { getCommandsList, getCommandsLogs } from '../../../services/requests';
 import { CommandLogShort } from '../../../typings/model';
 import CronSelect from '../../../components/CronSelect';
-import {getCommandDetailsUrl} from "../../../utils/paths";
+import { getCommandDetailsUrl } from '../../../utils/paths';
 
 const getStatusLabel = (label: string): string => {
   switch (label) {

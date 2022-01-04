@@ -1,6 +1,6 @@
 import { request, ResponseBody } from '@tager/admin-services';
 
-import {Command, CommandLog, CronLog, CronLogShort} from '../typings/model';
+import { Command, CommandLog, CronLog, CronLogShort } from '../typings/model';
 
 export function getCommandsList(): Promise<ResponseBody<Array<Command>>> {
   return request.get({ path: '/admin/cron/commands' });
@@ -26,7 +26,9 @@ export function getCommandsLogs(params?: {
   return request.get({ path: '/admin/cron/commands/logs', params });
 }
 
-export function getCommandLogDetails(id: number): Promise<ResponseBody<CommandLog>> {
+export function getCommandLogDetails(
+  id: number
+): Promise<ResponseBody<CommandLog>> {
   return request.get({ path: `/admin/cron/commands/logs/${id}` });
 }
 

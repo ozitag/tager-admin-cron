@@ -10,7 +10,11 @@ import { defineComponent, SetupContext } from '@vue/composition-api';
 import { useTranslation } from '@tager/admin-ui';
 import { MenuItemType } from '@tager/admin-layout';
 
-import { getCommandsListUrl, getCommandsLogs, getCronLogsUrl } from "../utils/paths";
+import {
+  getCommandsListUrl,
+  getCommandsLogs,
+  getCronLogsUrl,
+} from '../utils/paths';
 
 export default defineComponent({
   name: 'App',

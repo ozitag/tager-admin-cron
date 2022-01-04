@@ -3,56 +3,65 @@
     <div v-if="log">
       <div>
         <span>{{ t('pages:command') }}: </span>
-        <b>{{log.command}}</b>
+        <b>{{ log.command }}</b>
       </div>
       <div>
         <span>{{ t('pages:class') }}: </span>
-        <b>{{log.class}}</b>
+        <b>{{ log.class }}</b>
       </div>
       <div>
         <span>{{ t('pages:beginAt') }}: </span>
-        <b v-if="log.begin_at">{{ (new Date(log.begin_at)).toLocaleDateString('ru-RU', {
-          year: "numeric",
-          month: "long",
-          day: "numeric",
-          hour: "numeric",
-          minute: "numeric",
-          second: "numeric",
-        }) }}</b>
+        <b v-if="log.begin_at">{{
+          new Date(log.begin_at).toLocaleDateString('ru-RU', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+            hour: 'numeric',
+            minute: 'numeric',
+            second: 'numeric',
+          })
+        }}</b>
       </div>
       <div>
         <span>{{ t('pages:endAt') }}: </span>
-        <b v-if="log.end_at">{{ (new Date(log.end_at)).toLocaleDateString('ru-RU', {
-          year: "numeric",
-          month: "long",
-          day: "numeric",
-          hour: "numeric",
-          minute: "numeric",
-          second: "numeric",
-        }) }}</b>
+        <b v-if="log.end_at">{{
+          new Date(log.end_at).toLocaleDateString('ru-RU', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+            hour: 'numeric',
+            minute: 'numeric',
+            second: 'numeric',
+          })
+        }}</b>
       </div>
       <div>
-        <b v-if="log.status" :class="['status', getStatusLabel(log.status)]">{{getStatusLabel(log.status)}}</b>
+        <b v-if="log.status" :class="['status', getStatusLabel(log.status)]">{{
+          getStatusLabel(log.status)
+        }}</b>
       </div>
 
-      <cron-screen v-if="log.output" :content="log.output" title="Output:"/>
-      <cron-screen v-if="log.error" :content="log.error" type="danger" title="Error:"/>
+      <cron-screen v-if="log.output" :content="log.output" title="Output:" />
+      <cron-screen
+        v-if="log.error"
+        :content="log.error"
+        type="danger"
+        title="Error:"
+      />
     </div>
   </page>
 </template>
 
 <script lang="ts">
-import {computed, defineComponent, onMounted} from '@vue/composition-api';
+import { computed, defineComponent, onMounted } from '@vue/composition-api';
 
-import {
-  useTranslation,
-} from '@tager/admin-ui';
-import {Nullable, useResource} from '@tager/admin-services';
+import { useTranslation } from '@tager/admin-ui';
+import { Nullable, useResource } from '@tager/admin-services';
 
 import { getCronLogDetails } from '../../../services/requests';
 import { CronLog } from '../../../typings/model';
 import CronScreen from '../../../components/CronScreen';
-import {getStatusLabel} from "../../../utils/helper";
+import { getStatusLabel } from '../../../utils/helper';
 
 export default defineComponent({
   name: 'CronDetails',
@@ -63,9 +72,7 @@ export default defineComponent({
     const { t } = useTranslation(context);
     const id = computed<string>(() => context.root.$route.params.id);
 
-    const [fetchPost, { data: log }] = useResource<
-      Nullable<CronLog>
-    >({
+    const [fetchPost, { data: log }] = useResource<Nullable<CronLog>>({
       fetchResource: () => getCronLogDetails(Number(id.value)),
       initialValue: null,
       context,

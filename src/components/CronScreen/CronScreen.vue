@@ -1,7 +1,10 @@
 <template>
   <div class="wrap">
-    <div class="title" v-if="title">{{title}}</div>
-    <div :class="['cron_screen', type === 'danger' ? 'danger' : '']" v-if="content">
+    <div v-if="title" class="title">{{ title }}</div>
+    <div
+      v-if="content"
+      :class="['cron_screen', type === 'danger' ? 'danger' : '']"
+    >
       <div class="bar">
         <div class="red"></div>
         <div class="yellow"></div>
@@ -9,9 +12,9 @@
       </div>
       <div class="screen">
         <p class="pre_res">root@127.0.0.1:~$</p>
-        <div class="res" v-if="useHtml" v-html="content"></div>
-        <div class="res" v-else>
-          {{content}}
+        <div v-if="useHtml" class="res" v-html="content"></div>
+        <div v-else class="res">
+          {{ content }}
         </div>
       </div>
     </div>
@@ -59,7 +62,7 @@ export default {
     text-align: center;
     width: 100%;
     height: 25px;
-    background-color: #DAD9D9;
+    background-color: #dad9d9;
     margin: 0 auto;
     font-family: monospace;
     float: none;
@@ -68,13 +71,15 @@ export default {
     align-items: center;
     justify-content: flex-start;
   }
-  .red, .yellow, .green {
-    background-color: #E94B35;
+  .red,
+  .yellow,
+  .green {
+    background-color: #e94b35;
     border-radius: 100%;
     width: 15px;
     height: 15px;
     margin-right: 10px;
-    position:relative;
+    position: relative;
   }
   .red {
     margin-left: 10px;
@@ -83,10 +88,10 @@ export default {
     background-color: #f0f000;
   }
   .green {
-    background-color: #1AAF5C;
+    background-color: #1aaf5c;
   }
   .screen {
-    background-color: #33485E;
+    background-color: #33485e;
     width: 100%;
     min-height: 100px;
     max-height: 450px;

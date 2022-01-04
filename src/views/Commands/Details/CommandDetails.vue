@@ -1,9 +1,9 @@
 <template>
-  <page :title="t('pages:cronLogs')">
+  <page :title="t('pages:commandsLogs')">
     <div v-if="log">
       <div>
         <span>{{ t('pages:command') }}: </span>
-        <b>{{log.signature}}</b>
+        <b>{{ log.signature }}</b>
       </div>
       <div>
         <span>{{ t('pages:arguments') }}: </span>
@@ -17,44 +17,51 @@
       </div>
       <div>
         <span>{{ t('pages:executionTime') }}: </span>
-        <b>{{log.execution_time}}</b>
+        <b>{{ log.execution_time }}</b>
       </div>
       <div>
         <span>{{ t('pages:user') }}: </span>
-        <b>{{log.user ? log.user.name : ''}}</b>
+        <b>{{ log.user ? log.user.name : '' }}</b>
       </div>
       <div>
         <span>{{ t('pages:createdAt') }}: </span>
-        <b v-if="log.created_at">{{ (new Date(log.created_at)).toLocaleDateString('ru-RU', {
-          year: "numeric",
-          month: "long",
-          day: "numeric",
-          hour: "numeric",
-          minute: "numeric",
-          second: "numeric",
-        }) }}</b>
+        <b v-if="log.created_at">{{
+          new Date(log.created_at).toLocaleDateString('ru-RU', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+            hour: 'numeric',
+            minute: 'numeric',
+            second: 'numeric',
+          })
+        }}</b>
       </div>
       <div>
-        <b v-if="log.status" :class="['status', getStatusLabel(log.status)]">{{getStatusLabel(log.status)}}</b>
+        <b v-if="log.status" :class="['status', getStatusLabel(log.status)]">{{
+          getStatusLabel(log.status)
+        }}</b>
       </div>
 
-      <cron-screen v-if="log.output" :content="log.output" title="Output:" :useHtml="true" />
+      <cron-screen
+        v-if="log.output"
+        :content="log.output"
+        title="Output:"
+        :use-html="true"
+      />
     </div>
   </page>
 </template>
 
 <script lang="ts">
-import {computed, defineComponent, onMounted} from '@vue/composition-api';
+import { computed, defineComponent, onMounted } from '@vue/composition-api';
 
-import {
-  useTranslation,
-} from '@tager/admin-ui';
-import {Nullable, useResource} from '@tager/admin-services';
+import { useTranslation } from '@tager/admin-ui';
+import { Nullable, useResource } from '@tager/admin-services';
 
-import {getCommandLogDetails, getCronLogDetails} from '../../../services/requests';
-import {CommandLog, CronLog} from '../../../typings/model';
+import { getCommandLogDetails } from '../../../services/requests';
+import { CommandLog } from '../../../typings/model';
 import CronScreen from '../../../components/CronScreen';
-import {getStatusLabel} from "../../../utils/helper";
+import { getStatusLabel } from '../../../utils/helper';
 
 export default defineComponent({
   name: 'CommandDetails',
@@ -65,9 +72,7 @@ export default defineComponent({
     const { t } = useTranslation(context);
     const id = computed<string>(() => context.root.$route.params.id);
 
-    const [fetchPost, { data: log }] = useResource<
-        Nullable<CommandLog>
-        >({
+    const [fetchPost, { data: log }] = useResource<Nullable<CommandLog>>({
       fetchResource: () => getCommandLogDetails(Number(id.value)),
       initialValue: null,
       context,
