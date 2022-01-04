@@ -12,7 +12,7 @@ import { MenuItemType } from '@tager/admin-layout';
 
 import {
   getCommandsListUrl,
-  getCommandsLogs,
+  getCommandsLogsUrl,
   getCronLogsUrl,
 } from '../utils/paths';
 
@@ -33,7 +33,7 @@ export default defineComponent({
           },
           {
             text: t('pages:commandsLogs'),
-            url: getCommandsLogs(),
+            url: getCommandsLogsUrl(),
           },
           { text: t('pages:cronLogs'), url: getCronLogsUrl() },
         ],

@@ -4,7 +4,7 @@ import {
   getCronDetailsUrlRaw,
   getCommandDetailsUrlRaw,
   getCommandsListUrl,
-  getCommandsLogs,
+  getCommandsLogsUrl,
   getCronLogsUrl,
 } from '../utils/paths';
 import CommandLogs from '../views/Commands/Logs';
@@ -16,7 +16,7 @@ import CronDetails from '../views/CronCommands/Details';
 import { PAGES_ROUTE_PATHS } from './paths';
 
 export const PAGE_COMMANDS_LOGS_ROUTE: CustomRouteConfig = {
-  path: getCommandsLogs(),
+  path: getCommandsLogsUrl(),
   component: CommandLogs,
   name: 'Commands Logs',
   meta: {

@@ -18,7 +18,7 @@ export function getCronDetailsUrlRaw() {
   return PAGES_ROUTE_PATHS.PAGE_CRON_LOGS_DETAILS;
 }
 
-export function getCommandsLogs(): string {
+export function getCommandsLogsUrl(): string {
   return PAGES_ROUTE_PATHS.PAGE_COMMANDS_LOGS;
 }
 
