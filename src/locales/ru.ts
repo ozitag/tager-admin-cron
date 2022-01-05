@@ -26,6 +26,10 @@ const RU: typeof EN = {
   user: 'Пользователь',
   arguments: 'Параметры',
 
+  dateOfPublication: 'Дата',
+  from: 'от',
+  to: 'до',
+
   tabs: {
     common: 'Common',
     template: 'Template',

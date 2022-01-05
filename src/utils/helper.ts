@@ -1,10 +1,10 @@
 export const getStatusLabel = (label: string): string => {
   switch (label) {
     case 'STARTED':
-      return 'started';
+      return 'Started';
     case 'FAILED':
-      return 'failed';
+      return 'Failed';
     default:
-      return 'finished';
+      return 'Finished';
   }
 };

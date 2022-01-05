@@ -1,9 +1,21 @@
 import { request, ResponseBody } from '@tager/admin-services';
 
-import { Command, CommandLog, CronLog, CronLogShort } from '../typings/model';
+import {
+  Command,
+  CommandLog,
+  CronCommand,
+  CronLog,
+  CronLogShort,
+} from '../typings/model';
 
 export function getCommandsList(): Promise<ResponseBody<Array<Command>>> {
   return request.get({ path: '/admin/cron/commands' });
+}
+
+export function getCronCommandsList(): Promise<
+  ResponseBody<Array<CronCommand>>
+> {
+  return request.get({ path: '/admin/cron/logs/commands' });
 }
 
 export function getCronLogs(params?: {

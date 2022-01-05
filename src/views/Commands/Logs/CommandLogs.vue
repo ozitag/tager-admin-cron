@@ -5,6 +5,7 @@
       :row-data="rowData"
       :error-message="errorMessage"
       :search-query="searchQuery"
+      :loading="isLoading"
       :pagination="{
         pageSize,
         pageCount,
@@ -15,6 +16,55 @@
       <template v-slot:filters>
         <cron-select v-model="commandFilter" :options="commandsList" />
       </template>
+
+      <template v-slot:filters>
+        <advanced-search>
+          <div class="filters">
+            <form-field-multi-select
+              v-model="commandFilter"
+              :options="commandsList"
+              name="categoryFilter"
+              :searchable="true"
+              :label="t('pages:signature')"
+              class="filter"
+            />
+
+            <div class="filter">
+              <div class="date-label">
+                {{ $t('pages:dateOfPublication') }}
+              </div>
+
+              <div class="date-content">
+                <form-field
+                  v-model="dateFromFilter"
+                  :label="t('pages:from')"
+                  name="fromDateFilter"
+                  type="date"
+                  :max="dateToFilter"
+                />
+
+                <form-field
+                  v-model="dateToFilter"
+                  :label="t('pages:to')"
+                  name="toDateFilter"
+                  type="date"
+                  :min="dateFromFilter"
+                />
+              </div>
+            </div>
+
+            <form-field-multi-select
+              v-model="statusFilter"
+              :options="statusOptionFilters"
+              name="statusFilter"
+              :searchable="true"
+              :label="t('pages:status')"
+              class="filter"
+            />
+          </div>
+        </advanced-search>
+      </template>
+
       <template v-slot:cell(status)="{ row }">
         <div :class="['status', getStatusLabel(row.status)]">
           {{ getStatusLabel(row.status) }}
@@ -46,41 +96,21 @@
 </template>
 
 <script lang="ts">
-import {
-  computed,
-  defineComponent,
-  onMounted,
-  ref,
-  watch,
-} from '@vue/composition-api';
+import { defineComponent, watch } from '@vue/composition-api';
 import pick from 'lodash/pick';
 import isEqual from 'lodash/isEqual';
 
-import {
-  ColumnDefinition,
-  getFilterParamAsStringArray,
-  getFilterParams,
-  useDataTable,
-  useTranslation,
-} from '@tager/admin-ui';
-import { useResource } from '@tager/admin-services';
+import { useDataTable, useTranslation } from '@tager/admin-ui';
 
-import { getCommandsList, getCommandsLogs } from '../../../services/requests';
+import { getCommandsLogs } from '../../../services/requests';
 import { CommandLogShort } from '../../../typings/model';
 import CronSelect from '../../../components/CronSelect';
 import { getCommandDetailsUrl } from '../../../utils/paths';
 import EyeIcon from '../../../components/EyeIcon/EyeIcon.vue';
+import { getStatusLabel } from '../../../utils/helper';
 
-const getStatusLabel = (label: string): string => {
-  switch (label) {
-    case 'STARTED':
-      return 'started';
-    case 'FAILED':
-      return 'failed';
-    default:
-      return 'finished';
-  }
-};
+import { getColumnDefs } from './CommandLogs.helpers';
+import { useFilters } from './Hooks/useFilters';
 
 export default defineComponent({
   name: 'CommandLogs',
@@ -90,45 +120,22 @@ export default defineComponent({
   },
   setup(props, context) {
     const { t } = useTranslation(context);
-    const initialCommandFilter = computed(() => {
-      const value = getFilterParamAsStringArray(
-        context.root.$route.query,
-        'signature'
-      );
-      return value.length > 0 ? value[0] : '';
-    });
-    const commandFilter = ref<string | null>(initialCommandFilter.value);
 
-    const [fetchTemplateList, { data: _commandsList }] = useResource({
-      fetchResource: getCommandsList,
-      initialValue: [],
-      context,
-    });
-
-    onMounted(() => {
-      fetchTemplateList();
-    });
-
-    const commandsList = computed(() =>
-      _commandsList.value.map((i) => ({
-        value: i.signature,
-        label: i.signature,
-      }))
-    );
-
-    const filterParams = computed(() => {
-      return getFilterParams({
-        signature: getFilterParamAsStringArray(
-          context.root.$route.query,
-          'signature'
-        ),
-      });
-    });
+    const {
+      filterParams,
+      dateFromFilter,
+      dateToFilter,
+      statusOptionFilters,
+      statusFilter,
+      commandFilter,
+      commandsList,
+    } = useFilters(context);
 
     const {
       fetchEntityList: fetchList,
       rowData: pageList,
       errorMessage,
+      isLoading,
       searchQuery,
       handleChange,
       pageSize,
@@ -149,12 +156,10 @@ export default defineComponent({
       pageSize: 100,
     });
 
-    watch(commandFilter, () => {
+    watch(filterParams, () => {
       const newQuery = {
         ...pick(context.root.$route.query, ['query', 'pageNumber']),
-        ...getFilterParams({
-          signature: commandFilter.value || '',
-        }),
+        ...filterParams.value,
       };
 
       if (!isEqual(context.root.$route.query, newQuery)) {
@@ -163,46 +168,7 @@ export default defineComponent({
       }
     });
 
-    const columnDefs: Array<ColumnDefinition<any>> = [
-      {
-        id: 1,
-        name: t('pages:command'),
-        field: 'signature',
-      },
-      {
-        id: 2,
-        name: t('pages:arguments'),
-        field: 'arguments',
-      },
-      {
-        id: 3,
-        name: t('pages:createdAt'),
-        field: 'created_at',
-        type: 'datetime',
-      },
-      {
-        id: 4,
-        name: t('pages:executionTime'),
-        field: 'execution_time',
-      },
-      {
-        id: 5,
-        name: t('pages:status'),
-        field: 'status',
-      },
-      {
-        id: 6,
-        name: t('pages:user'),
-        field: 'user.name',
-      },
-      {
-        id: 6,
-        name: '',
-        field: 'actions',
-        style: { whiteSpace: 'nowrap', width: '40px' },
-        headStyle: { whiteSpace: 'nowrap', width: '40px' },
-      },
-    ];
+    const columnDefs = getColumnDefs(t);
 
     return {
       columnDefs,
@@ -215,9 +181,14 @@ export default defineComponent({
       pageCount,
       pageNumber,
       commandFilter,
+      dateToFilter,
+      dateFromFilter,
+      statusFilter,
       commandsList,
       getStatusLabel,
       getCommandDetailsUrl,
+      statusOptionFilters,
+      isLoading,
       t,
     };
   },
@@ -225,8 +196,19 @@ export default defineComponent({
 </script>
 
 <style scoped lang="scss">
-.filter {
-  margin-bottom: 10px;
+.filters {
+  display: flex;
+  margin: 0 -10px;
+
+  &:not(:first-child) {
+    margin-top: 10px;
+  }
+
+  .filter {
+    padding: 10px 10px 0;
+    width: 50%;
+    margin: 0;
+  }
 }
 .status {
   display: inline-block;
@@ -235,13 +217,13 @@ export default defineComponent({
   font-size: 11px;
   color: #fff;
 
-  &.failed {
+  &.Failed {
     background: rgba(255, 0, 0, 0.58);
   }
-  &.finished {
+  &.Finished {
     background: #679bff;
   }
-  &.started {
+  &.Started {
     background: #9f9f9f;
   }
 }

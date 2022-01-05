@@ -24,6 +24,10 @@ const EN = {
   user: 'User',
   arguments: 'Arguments',
 
+  dateOfPublication: 'Date',
+  from: 'from',
+  to: 'to',
+
   tabs: {
     common: 'Common',
     template: 'Template',

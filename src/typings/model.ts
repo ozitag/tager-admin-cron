@@ -40,6 +40,10 @@ export interface Command {
   readonly arguments: Array<CommandArgument>;
 }
 
+export interface CronCommand {
+  readonly value: string;
+}
+
 interface CommandArgument {
   readonly name: string;
   readonly default: string | null;

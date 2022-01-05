@@ -5,6 +5,7 @@
       :row-data="rowData"
       :error-message="errorMessage"
       :search-query="searchQuery"
+      :loading="isLoading"
       :pagination="{
         pageSize,
         pageCount,
@@ -12,6 +13,54 @@
       }"
       @change="handleChange"
     >
+      <template v-slot:filters>
+        <advanced-search>
+          <div class="filters">
+            <form-field-multi-select
+              v-model="commandFilter"
+              :options="commandsList"
+              name="categoryFilter"
+              :searchable="true"
+              :label="t('pages:signature')"
+              class="filter"
+            />
+
+            <div class="filter">
+              <div class="date-label">
+                {{ $t('pages:dateOfPublication') }}
+              </div>
+
+              <div class="date-content">
+                <form-field
+                  v-model="dateFromFilter"
+                  :label="t('pages:from')"
+                  name="fromDateFilter"
+                  type="date"
+                  :max="dateToFilter"
+                />
+
+                <form-field
+                  v-model="dateToFilter"
+                  :label="t('pages:to')"
+                  name="toDateFilter"
+                  type="date"
+                  :min="dateFromFilter"
+                />
+              </div>
+            </div>
+
+            <form-field-multi-select
+              v-model="statusFilter"
+              :options="statusOptionFilters"
+              name="statusFilter"
+              :searchable="true"
+              :label="t('pages:status')"
+              class="filter"
+            />
+          </div>
+        </advanced-search>
+      </template>
+
       <template v-slot:cell(status)="{ row }">
         <div :class="['status', getStatusLabel(row.status)]">
           {{ getStatusLabel(row.status) }}
@@ -38,13 +87,11 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from '@vue/composition-api';
+import { defineComponent, watch } from '@vue/composition-api';
+import pick from 'lodash/pick';
+import isEqual from 'lodash/isEqual';
 
-import {
-  ColumnDefinition,
-  useDataTable,
-  useTranslation,
-} from '@tager/admin-ui';
+import { useDataTable, useTranslation } from '@tager/admin-ui';
 
 import { getCronLogs } from '../../../services/requests';
 import { CronLogShort } from '../../../typings/model';
@@ -52,6 +99,9 @@ import CronSelect from '../../../components/CronSelect';
 import { getCronDetailsUrl } from '../../../utils/paths';
 import { getStatusLabel } from '../../../utils/helper';
 import EyeIcon from '../../../components/EyeIcon/EyeIcon.vue';
+
+import { getColumnDefs } from './CronLogs.helpers';
+import { useFilters } from './Hooks/useFilters';
 
 export default defineComponent({
   name: 'CronLogs',
@@ -63,7 +113,19 @@ export default defineComponent({
     const { t } = useTranslation(context);
 
     const {
+      filterParams,
+      dateFromFilter,
+      dateToFilter,
+      statusOptionFilters,
+      statusFilter,
+      commandFilter,
+      commandsList,
+    } = useFilters(context);
+
+    const {
       rowData: pageList,
+      fetchEntityList: fetchList,
+      isLoading,
       errorMessage,
       searchQuery,
       handleChange,
@@ -76,6 +138,7 @@ export default defineComponent({
           query: params.searchQuery,
           pageNumber: params.pageNumber,
           pageSize: params.pageSize,
+          ...filterParams.value,
         });
       },
       initialValue: [],
@@ -84,37 +147,19 @@ export default defineComponent({
       pageSize: 100,
     });
 
-    const columnDefs: Array<ColumnDefinition<any>> = [
-      {
-        id: 1,
-        name: t('pages:command'),
-        field: 'command',
-      },
-      {
-        id: 3,
-        name: t('pages:beginAt'),
-        field: 'begin_at',
-        type: 'datetime',
-      },
-      {
-        id: 4,
-        name: t('pages:endAt'),
-        field: 'end_at',
-        type: 'datetime',
-      },
-      {
-        id: 5,
-        name: t('pages:status'),
-        field: 'status',
-      },
-      {
-        id: 6,
-        name: '',
-        field: 'actions',
-        style: { whiteSpace: 'nowrap', width: '40px' },
-        headStyle: { whiteSpace: 'nowrap', width: '40px' },
-      },
-    ];
+    watch(filterParams, () => {
+      const newQuery = {
+        ...pick(context.root.$route.query, ['query', 'pageNumber']),
+        ...filterParams.value,
+      };
+
+      if (!isEqual(context.root.$route.query, newQuery)) {
+        context.root.$router.replace({ query: newQuery });
+        fetchList();
+      }
+    });
+
+    const columnDefs = getColumnDefs(t);
 
     return {
       columnDefs,
@@ -129,14 +174,32 @@ export default defineComponent({
       getStatusLabel,
       getCronDetailsUrl,
       t,
+      dateFromFilter,
+      dateToFilter,
+      statusOptionFilters,
+      statusFilter,
+      commandFilter,
+      commandsList,
+      isLoading,
     };
   },
 });
 </script>
 
 <style scoped lang="scss">
-.filter {
-  margin-bottom: 10px;
+.filters {
+  display: flex;
+  margin: 0 -10px;
+
+  &:not(:first-child) {
+    margin-top: 10px;
+  }
+
+  .filter {
+    padding: 10px 10px 0;
+    width: 50%;
+    margin: 0;
+  }
 }
 .status {
   display: inline-block;
@@ -145,13 +208,13 @@ export default defineComponent({
   font-size: 11px;
   color: #fff;
 
-  &.failed {
+  &.Failed {
     background: rgba(255, 0, 0, 0.58);
   }
-  &.finished {
+  &.Finished {
     background: #679bff;
   }
-  &.started {
+  &.Started {
     background: #9f9f9f;
   }
 }
