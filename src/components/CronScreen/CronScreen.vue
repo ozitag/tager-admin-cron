@@ -2,7 +2,7 @@
   <div class="wrap">
     <div v-if="title" class="title">{{ title }}</div>
     <div
-      v-if="content"
+      v-if="content || useEmptyState"
       :class="['cron_screen', type === 'danger' ? 'danger' : '']"
     >
       <div class="bar">
@@ -11,7 +11,11 @@
         <div class="green"></div>
       </div>
       <div class="screen">
-        <p class="pre_res">root@127.0.0.1:~$</p>
+        <p class="pre_res">
+          <span
+            >root@127.0.0.1:~$ <i>{{ inputContent }}</i></span
+          >
+        </p>
         <div v-if="useHtml" class="res" v-html="content"></div>
         <div v-else class="res">
           {{ content }}
@@ -29,7 +33,15 @@ export default {
       type: String,
       required: true,
     },
+    inputContent: {
+      type: String,
+      required: true,
+    },
     useHtml: {
+      type: Boolean,
+      required: false,
+    },
+    useEmptyState: {
       type: Boolean,
       required: false,
     },
@@ -106,7 +118,11 @@ export default {
 
   .pre_res {
     color: #fff;
-    padding-bottom: 5px;
+    margin-bottom: 20px;
+
+    i {
+      color: #a4ffcc;
+    }
   }
 
   color: #fff;

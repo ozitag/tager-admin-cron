@@ -17,6 +17,7 @@ import {
   PAGE_COMMANDS_LOGS_ROUTE,
   PAGE_COMMANDS_LOG_DETAILS_ROUTE,
   PAGE_CRON_LOG_DETAILS_ROUTE,
+  PAGE_COMMANDS_DETAILS_ROUTE,
 } from './constants/routes';
 
 configStore.setConfig(config);
@@ -29,6 +30,7 @@ const router = createRouter(
       PAGE_CRON_LOG_DETAILS_ROUTE,
       PAGE_COMMANDS_LOGS_ROUTE,
       PAGE_COMMANDS_LOG_DETAILS_ROUTE,
+      PAGE_COMMANDS_DETAILS_ROUTE,
     ],
   },
   { useTitleSync: false }

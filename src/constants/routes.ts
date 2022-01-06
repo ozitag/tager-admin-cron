@@ -2,16 +2,18 @@ import { CustomRouteConfig } from '@tager/admin-layout';
 
 import {
   getCronDetailsUrlRaw,
+  getCommandLogDetailsUrlRaw,
   getCommandDetailsUrlRaw,
   getCommandsListUrl,
   getCommandsLogsUrl,
   getCronLogsUrl,
 } from '../utils/paths';
 import CommandLogs from '../views/Commands/Logs';
-import CommandDetails from '../views/Commands/Details';
+import CommandLogDetails from '../views/Commands/LogDetails';
 import CronLogs from '../views/CronCommands/Logs';
 import CommandList from '../views/Commands/List';
 import CronDetails from '../views/CronCommands/Details';
+import CommandDetails from '../views/Commands/Details';
 
 import { PAGES_ROUTE_PATHS } from './paths';
 
@@ -28,8 +30,8 @@ export const PAGE_COMMANDS_LOGS_ROUTE: CustomRouteConfig = {
 };
 
 export const PAGE_COMMANDS_LOG_DETAILS_ROUTE: CustomRouteConfig = {
-  path: getCommandDetailsUrlRaw(),
-  component: CommandDetails,
+  path: getCommandLogDetailsUrlRaw(),
+  component: CommandLogDetails,
   name: 'Commands Logs',
   meta: {
     getBreadcrumbs: (route, t) => [
@@ -73,6 +75,19 @@ export const PAGE_COMMANDS_ROUTE: CustomRouteConfig = {
     getBreadcrumbs: (route, t) => [
       { url: '/', text: t('pages:home') },
       { url: route.path, text: t('pages:commands') },
+    ],
+  },
+};
+
+export const PAGE_COMMANDS_DETAILS_ROUTE: CustomRouteConfig = {
+  path: getCommandDetailsUrlRaw(),
+  component: CommandDetails,
+  name: 'Commands Execute',
+  meta: {
+    getBreadcrumbs: (route, t) => [
+      { url: '/', text: t('pages:home') },
+      { url: PAGES_ROUTE_PATHS.PAGE_COMMANDS, text: t('pages:commands') },
+      { url: route.path, text: t('pages:commandExecute') },
     ],
   },
 };

@@ -8,8 +8,21 @@ import {
   CronLogShort,
 } from '../typings/model';
 
-export function getCommandsList(): Promise<ResponseBody<Array<Command>>> {
-  return request.get({ path: '/admin/cron/commands' });
+export function getCommandsList(
+  query?: string
+): Promise<ResponseBody<Array<Command>>> {
+  return request.get({
+    path: '/admin/cron/commands',
+    params: {
+      query,
+    },
+  });
+}
+
+export function getCommandDetails(
+  signature: string
+): Promise<ResponseBody<Command>> {
+  return request.get({ path: `/admin/cron/commands/${signature}` });
 }
 
 export function getCronCommandsList(): Promise<

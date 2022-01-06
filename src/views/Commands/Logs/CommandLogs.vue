@@ -86,7 +86,7 @@
         <base-button
           variant="icon"
           :title="t('pages:view')"
-          :href="getCommandDetailsUrl(row.id)"
+          :href="getCommandLogDetailsUrl(row.id)"
         >
           <EyeIcon />
         </base-button>
@@ -105,7 +105,7 @@ import { useDataTable, useTranslation } from '@tager/admin-ui';
 import { getCommandsLogs } from '../../../services/requests';
 import { CommandLogShort } from '../../../typings/model';
 import CronSelect from '../../../components/CronSelect';
-import { getCommandDetailsUrl } from '../../../utils/paths';
+import { getCommandLogDetailsUrl } from '../../../utils/paths';
 import EyeIcon from '../../../components/EyeIcon/EyeIcon.vue';
 import { getStatusLabel } from '../../../utils/helper';
 
@@ -186,7 +186,7 @@ export default defineComponent({
       statusFilter,
       commandsList,
       getStatusLabel,
-      getCommandDetailsUrl,
+      getCommandLogDetailsUrl,
       statusOptionFilters,
       isLoading,
       t,

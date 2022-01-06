@@ -8,11 +8,13 @@ const EN = {
   cronLogDetails: 'Cron Log',
   commandsLogs: 'Commands Logs',
   commandLogDetails: 'Command Log',
+  commandExecute: 'Command Execute',
   commands: 'Commands List',
   view: 'View',
   secondShort: 'sec.',
 
   command: 'Command',
+  description: 'Description',
   class: 'Class Name',
   output: 'Output',
   beginAt: 'Begin At',

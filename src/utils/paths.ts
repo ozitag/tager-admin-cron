@@ -22,10 +22,18 @@ export function getCommandsLogsUrl(): string {
   return PAGES_ROUTE_PATHS.PAGE_COMMANDS_LOGS;
 }
 
-export function getCommandDetailsUrl(id: number) {
+export function getCommandLogDetailsUrl(id: number) {
   return compile(PAGES_ROUTE_PATHS.PAGE_COMMANDS_LOGS_DETAILS)({ id });
 }
 
+export function getCommandDetailsUrl(signature: string) {
+  return compile(PAGES_ROUTE_PATHS.PAGE_COMMANDS_DETAILS)({ signature });
+}
+
 export function getCommandDetailsUrlRaw() {
+  return PAGES_ROUTE_PATHS.PAGE_COMMANDS_DETAILS;
+}
+
+export function getCommandLogDetailsUrlRaw() {
   return PAGES_ROUTE_PATHS.PAGE_COMMANDS_LOGS_DETAILS;
 }

@@ -1,76 +1,51 @@
 <template>
-  <page :title="t('pages:commandLogDetails') + (log ? ' ID ' + log.id : '')">
-    <div v-if="log">
-      <field-value
-        :label="t('pages:command')"
-        type="text"
-        :text="log.signature"
-      />
-      <field-value
-        :label="t('pages:executionTime')"
-        type="text"
-        :text="log.execution_time + ' ' + t('pages:secondShort')"
-      />
-      <field-value
-        v-if="log.user"
-        :label="t('pages:user')"
-        type="text"
-        :text="log.user ? log.user.name : ''"
-      />
-      <field-value
-        :label="t('pages:status')"
-        type="text"
-        :text="getStatusLabel(log.status)"
-      />
-      <field-value
-        :label="t('pages:status')"
-        type="text"
-        :text="getStatusLabel(log.status)"
-      />
-      <field-value
-        v-if="log.created_at"
-        :label="t('pages:createdAt')"
-        type="text"
-        :text="
-          new Date(log.created_at).toLocaleDateString('ru-RU', {
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric',
-            hour: 'numeric',
-            minute: 'numeric',
-            second: 'numeric',
-          })
-        "
-      />
-      <div class="arguments_wrap">
-        <span class="arguments_title">{{ t('pages:arguments') }}: </span>
-        <div>
-          <div v-for="(val, key) in log.arguments" :key="key" class="argument">
-            <div class="argument_name">{{ key }}:</div>
-            <div v-if="val" class="argument_value">{{ val }}</div>
-            <div v-else class="argument_null"></div>
-          </div>
+  <page :title="t('pages:commandExecute')">
+    <div v-if="command" class="select-row">
+      <h3>{{ command.signature }}</h3>
+      <small>{{ command.description }}</small>
+      <div class="params">
+        <div v-for="argument in args" :key="argument.name" class="param">
+          <base-select
+            v-if="argument.values.length"
+            v-model="argument.value"
+            :options="argument.values"
+            :placeholder="argument.name"
+          />
+          <base-input
+            v-else
+            :key="argument.name"
+            v-model="argument.value"
+            :placeholder="argument.name"
+          />
         </div>
+        <base-button :disabled="isSubmitting" @click="executeCommandHandler"
+          >Execute</base-button
+        >
       </div>
-
-      <cron-screen
-        v-if="log.output"
-        :content="log.output"
-        :title="t('pages:outputRes')"
+      <CronScreen
+        :content="response"
         :use-html="true"
+        :use-empty-state="true"
+        :input-content="getInputString(command.signature, args)"
       />
     </div>
   </page>
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, onMounted } from '@vue/composition-api';
+import {
+  computed,
+  defineComponent,
+  onMounted,
+  ref,
+  watch,
+} from '@vue/composition-api';
 
 import { useTranslation } from '@tager/admin-ui';
 import { Nullable, useResource } from '@tager/admin-services';
 
-import { getCommandLogDetails } from '../../../services/requests';
-import { CommandLog } from '../../../typings/model';
+import { executeCommand, getCommandDetails } from '../../../services/requests';
+import { Command } from '../../../typings/model';
 import CronScreen from '../../../components/CronScreen';
 import { getStatusLabel } from '../../../utils/helper';
 
@@ -81,23 +56,97 @@ export default defineComponent({
   },
   setup(props, context) {
     const { t } = useTranslation(context);
-    const id = computed<string>(() => context.root.$route.params.id);
+    const signature = computed<string>(
+      () => context.root.$route.params.signature
+    );
+    const response = ref<string | null>(null);
+    const args = ref<any[]>([]);
+    const isSubmitting = ref<boolean>(false);
 
-    const [fetchPost, { data: log }] = useResource<Nullable<CommandLog>>({
-      fetchResource: () => getCommandLogDetails(Number(id.value)),
+    const [fetchPost, { data: command }] = useResource<Nullable<Command>>({
+      fetchResource: () => getCommandDetails(signature.value),
       initialValue: null,
       context,
-      resourceName: 'Post',
     });
 
     onMounted(() => {
       fetchPost();
     });
 
+    watch(command, () => {
+      response.value = null;
+      args.value = command.value
+        ? command.value.arguments.map((i) => ({
+            ...i,
+            value: i.default,
+            values: i.values
+              ? i.values.map((u) => ({
+                  label: u,
+                  value: u,
+                }))
+              : [],
+          }))
+        : [];
+    });
+
+    const executeCommandHandler = (): void => {
+      const body = {
+        command: command.value?.signature,
+        arguments: args.value.map((u) => ({
+          name: u.name,
+          value:
+            u.value && typeof u.value !== 'string' ? u.value.value : u.value,
+        })),
+      };
+
+      isSubmitting.value = true;
+      executeCommand(body)
+        .then((res) => {
+          context.root.$toast({
+            variant: 'success',
+            title: t('pages:success'),
+            body: t('pages:execSuccessMessage'),
+          });
+          response.value = res.data.response;
+        })
+        .catch(() => {
+          response.value = null;
+          context.root.$toast({
+            variant: 'danger',
+            title: t('pages:error'),
+            body: t('pages:execErrorMessage'),
+          });
+        })
+        .finally(() => {
+          isSubmitting.value = false;
+        });
+    };
+
+    const getInputString = (command: string, args: Array<any>): string => {
+      const _res = 'php artisan ' + command + ' ';
+      const _args = args
+        .filter((u) =>
+          u.value && typeof u.value !== 'string' ? u.value.value : u.value
+        )
+        .map(
+          (u) =>
+            u.name +
+            '=' +
+            (u.value && typeof u.value !== 'string' ? u.value.value : u.value)
+        )
+        .join(' ');
+      return _res + _args;
+    };
+
     return {
       origin,
       getStatusLabel,
-      log,
+      command,
+      executeCommandHandler,
+      isSubmitting,
+      args,
+      getInputString,
+      response,
       t,
     };
   },
@@ -105,50 +154,15 @@ export default defineComponent({
 </script>
 
 <style scoped lang="scss">
-.status {
-  display: inline-block;
-  padding: 2px 6px;
-  border-radius: 5px;
-  font-size: 11px;
-  color: #fff;
-
-  &.failed {
-    background: rgba(255, 0, 0, 0.58);
-  }
-  &.finished {
-    background: #679bff;
-  }
-  &.started {
-    background: #9f9f9f;
-  }
-}
-.arguments_title {
-  margin-bottom: 14px;
-  display: block;
-}
-.arguments_wrap {
-  margin-bottom: 20px;
-}
-.argument {
+.params {
   display: flex;
-  margin: 0px 5px 5px 0px;
-  font-size: 12px;
+  margin: 10px 0 20px 0;
 
-  .argument_name {
-    background: #33485e;
-    color: #fff;
-    padding: 2px;
-    border-radius: 4px 0px 0px 4px;
-  }
-  .argument_value {
-    background: #ececec;
-    padding: 2px;
-    border-radius: 0px 4px 4px 0px;
-  }
-  .argument_null {
-    background: #fcc;
-    padding: 2px;
-    border-radius: 0px 4px 4px 0px;
+  .param {
+    display: block;
+    width: 33%;
+    box-sizing: border-box;
+    margin-right: 10px;
   }
 }
 </style>
