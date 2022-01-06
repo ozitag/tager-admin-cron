@@ -17,7 +17,7 @@ export const useFilters = (context: any) => {
   });
 
   onMounted(() => {
-    fetchTemplateList();
+    fetchTemplateList('');
   });
 
   const commandsList = computed<OptionType[]>(() =>
