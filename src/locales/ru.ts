@@ -11,6 +11,7 @@ const RU: typeof EN = {
   cronLogDetails: 'Лог команды',
   commands: 'Список команд',
   commandLogDetails: 'Лог команды',
+  execute: 'Выполнить',
   commandExecute: 'Выполнение команды',
   view: 'Подробнее',
   secondShort: 'сек.',

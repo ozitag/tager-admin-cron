@@ -18,9 +18,9 @@
             :placeholder="argument.name"
           />
         </div>
-        <base-button :disabled="isSubmitting" @click="executeCommandHandler"
-          >Execute</base-button
-        >
+        <base-button :disabled="isSubmitting" @click="executeCommandHandler">{{
+          t('pages:execute')
+        }}</base-button>
       </div>
       <CronScreen
         :content="response"
@@ -100,6 +100,7 @@ export default defineComponent({
       };
 
       isSubmitting.value = true;
+      response.value = 'In progress...';
       executeCommand(body)
         .then((res) => {
           context.root.$toast({

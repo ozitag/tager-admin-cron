@@ -9,6 +9,7 @@ const EN = {
   commandsLogs: 'Commands Logs',
   commandLogDetails: 'Command Log',
   commandExecute: 'Command Execute',
+  execute: 'Execute',
   commands: 'Commands List',
   view: 'View',
   secondShort: 'sec.',
