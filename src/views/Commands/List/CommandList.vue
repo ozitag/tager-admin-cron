@@ -1,33 +1,33 @@
 <template>
-  <page :title="t('pages:commands')">
-    <data-table
+  <Page :title="t('cron:commands')">
+    <DataTable
       :column-defs="columnDefs"
       :row-data="commandsList"
       :loading="isLoading"
       :search-query="searchQuery"
       @change="handleChange"
     >
-      <template v-slot:cell(actions)="{ row }">
-        <base-button
+      <template #cell(actions)="{ row }">
+        <BaseButton
           variant="icon"
-          :title="t('pages:view')"
+          :title="t('cron:view')"
           :href="getCommandDetailsUrl(row.signature)"
         >
           <ConsoleIcon />
-        </base-button>
+        </BaseButton>
       </template>
-    </data-table>
-  </page>
+    </DataTable>
+  </Page>
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, ref } from '@vue/composition-api';
+import { defineComponent, onMounted, ref } from 'vue';
 
-import { useDataTable, useTranslation } from '@tager/admin-ui';
+import { BaseButton, useDataTable, DataTable } from '@tager/admin-ui';
+import { Page } from '@tager/admin-layout';
+import { useI18n } from '@tager/admin-services';
 
 import { getCommandsList } from '../../../services/requests';
-import CronSelect from '../../../components/CronSelect';
-import CronScreen from '../../../components/CronScreen';
 import { getCommandDetailsUrl } from '../../../utils/paths';
 import ConsoleIcon from '../../../components/ConsoleIcon/ConsoleIcon.vue';
 
@@ -36,13 +36,14 @@ import { getColumnDefs } from './CommandList.helper';
 export default defineComponent({
   name: 'CommandList',
   components: {
-    CronSelect,
-    CronScreen,
+    BaseButton,
+    Page,
     ConsoleIcon,
+    DataTable,
   },
-  setup(props, context) {
+  setup() {
     const selectedCommad = ref<string | null>(null);
-    const { t } = useTranslation(context);
+    const { t } = useI18n();
 
     const {
       fetchEntityList: fetchTemplateList,
@@ -55,7 +56,6 @@ export default defineComponent({
         return getCommandsList(params.searchQuery);
       },
       initialValue: [],
-      context,
     });
 
     onMounted(() => {
@@ -90,6 +90,7 @@ export default defineComponent({
     margin-right: 10px;
   }
 }
+
 .response {
   background: #fbfbfb;
   padding: 10px;

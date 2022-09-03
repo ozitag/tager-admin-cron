@@ -5,12 +5,12 @@ import { ColumnDefinition } from '@tager/admin-ui';
 export const getColumnDefs = (t: TFunction): Array<ColumnDefinition<any>> => [
   {
     id: 1,
-    name: t('pages:command'),
+    name: t('cron:command'),
     field: 'signature',
   },
   {
     id: 2,
-    name: t('pages:description'),
+    name: t('cron:description'),
     field: 'description',
   },
   {

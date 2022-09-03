@@ -5,33 +5,33 @@ import { ColumnDefinition } from '@tager/admin-ui';
 export const getColumnDefs = (t: TFunction): Array<ColumnDefinition<any>> => [
   {
     id: 1,
-    name: t('pages:command'),
+    name: t('cron:command'),
     field: 'signature',
   },
   {
     id: 2,
-    name: t('pages:arguments'),
+    name: t('cron:arguments'),
     field: 'arguments',
   },
   {
     id: 3,
-    name: t('pages:createdAt'),
+    name: t('cron:createdAt'),
     field: 'created_at',
     type: 'datetime',
   },
   {
     id: 4,
-    name: t('pages:executionTime'),
+    name: t('cron:executionTime'),
     field: 'execution_time',
   },
   {
     id: 5,
-    name: t('pages:status'),
+    name: t('cron:status'),
     field: 'status',
   },
   {
     id: 6,
-    name: t('pages:user'),
+    name: t('cron:user'),
     field: 'user.name',
   },
   {

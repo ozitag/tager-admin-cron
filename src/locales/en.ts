@@ -1,6 +1,5 @@
-const EN = {
+export const EN = {
   home: 'Home',
-  pages: 'Pages',
   createPage: 'Create page',
   viewPage: 'View Page',
   cron: 'Commands',

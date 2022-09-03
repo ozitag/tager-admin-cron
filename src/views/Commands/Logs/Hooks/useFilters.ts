@@ -1,4 +1,5 @@
-import { computed, onMounted, ref } from '@vue/composition-api';
+import { computed, onMounted, ref } from 'vue';
+import { RouteLocationNormalizedLoaded } from 'vue-router';
 
 import { useResource } from '@tager/admin-services';
 import {
@@ -9,11 +10,10 @@ import {
 
 import { getCommandsList } from '../../../../services/requests';
 
-export const useFilters = (context: any) => {
+export const useFilters = (route: RouteLocationNormalizedLoaded) => {
   const [fetchTemplateList, { data: _commandsList }] = useResource({
     fetchResource: getCommandsList,
     initialValue: [],
-    context,
   });
 
   onMounted(() => {
@@ -28,10 +28,7 @@ export const useFilters = (context: any) => {
   );
 
   const initialCommandFilter = computed<OptionType[]>(() => {
-    const queryValue = getFilterParamAsStringArray(
-      context.root.$route.query,
-      'signature'
-    );
+    const queryValue = getFilterParamAsStringArray(route.query, 'signature');
     return commandsList.value.filter(({ value }) =>
       queryValue.some((selected) => selected === value)
     );
@@ -39,19 +36,13 @@ export const useFilters = (context: any) => {
   const commandFilter = ref<OptionType[]>(initialCommandFilter.value);
 
   const initialDateFromFilter = computed(() => {
-    const value = getFilterParamAsStringArray(
-      context.root.$route.query,
-      'date-from'
-    );
+    const value = getFilterParamAsStringArray(route.query, 'date-from');
     return value.length > 0 ? value[0] : '';
   });
   const dateFromFilter = ref<string | null>(initialDateFromFilter.value);
 
   const initialDateToFilter = computed(() => {
-    const value = getFilterParamAsStringArray(
-      context.root.$route.query,
-      'date-to'
-    );
+    const value = getFilterParamAsStringArray(route.query, 'date-to');
     return value.length > 0 ? value[0] : '';
   });
   const dateToFilter = ref<string | null>(initialDateToFilter.value);
@@ -62,10 +53,7 @@ export const useFilters = (context: any) => {
     { label: 'Failed', value: 'FAILED' },
   ]);
   const initialStatusFilter = computed<OptionType[]>(() => {
-    const queryValue = getFilterParamAsStringArray(
-      context.root.$route.query,
-      'status'
-    );
+    const queryValue = getFilterParamAsStringArray(route.query, 'status');
     return statusOptionFilters.value.filter(({ value }) =>
       queryValue.some((selected) => selected === value)
     );

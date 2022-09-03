@@ -1,35 +1,35 @@
 <template>
-  <page :title="t('pages:commandLogDetails') + (log ? ' ID ' + log.id : '')">
+  <Page :title="t('cron:commandLogDetails') + (log ? ' ID ' + log.id : '')">
     <div v-if="log">
-      <field-value
-        :label="t('pages:command')"
+      <FieldValue
+        :label="t('cron:command')"
         type="text"
         :text="log.signature"
       />
-      <field-value
-        :label="t('pages:executionTime')"
+      <FieldValue
+        :label="t('cron:executionTime')"
         type="text"
-        :text="log.execution_time + ' ' + t('pages:secondShort')"
+        :text="log.execution_time + ' ' + t('cron:secondShort')"
       />
-      <field-value
+      <FieldValue
         v-if="log.user"
-        :label="t('pages:user')"
+        :label="t('cron:user')"
         type="text"
         :text="log.user ? log.user.name : ''"
       />
-      <field-value
-        :label="t('pages:status')"
+      <FieldValue
+        :label="t('cron:status')"
         type="text"
         :text="getStatusLabel(log.status)"
       />
-      <field-value
-        :label="t('pages:status')"
+      <FieldValue
+        :label="t('cron:status')"
         type="text"
         :text="getStatusLabel(log.status)"
       />
-      <field-value
+      <FieldValue
         v-if="log.created_at"
-        :label="t('pages:createdAt')"
+        :label="t('cron:createdAt')"
         type="text"
         :text="
           new Date(log.created_at).toLocaleDateString('ru-RU', {
@@ -43,7 +43,7 @@
         "
       />
       <div class="arguments_wrap">
-        <span class="arguments_title">{{ t('pages:arguments') }}: </span>
+        <span class="arguments_title">{{ t('cron:arguments') }}: </span>
         <div>
           <div v-for="(val, key) in log.arguments" :key="key" class="argument">
             <div class="argument_name">{{ key }}:</div>
@@ -53,21 +53,23 @@
         </div>
       </div>
 
-      <cron-screen
+      <CronScreen
         v-if="log.output"
         :content="log.output"
-        :title="t('pages:outputRes')"
+        :title="t('cron:outputRes')"
         :use-html="true"
       />
     </div>
-  </page>
+  </Page>
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, onMounted } from '@vue/composition-api';
+import { computed, defineComponent, onMounted } from 'vue';
+import { useRoute } from 'vue-router';
 
-import { useTranslation } from '@tager/admin-ui';
-import { Nullable, useResource } from '@tager/admin-services';
+import { FieldValue } from '@tager/admin-ui';
+import { Nullable, useI18n, useResource } from '@tager/admin-services';
+import { Page } from '@tager/admin-layout';
 
 import { getCommandLogDetails } from '../../../services/requests';
 import { CommandLog } from '../../../typings/model';
@@ -77,17 +79,20 @@ import { getStatusLabel } from '../../../utils/helper';
 export default defineComponent({
   name: 'CommandLogDetails',
   components: {
+    FieldValue,
+    Page,
     CronScreen,
   },
-  setup(props, context) {
-    const { t } = useTranslation(context);
-    const id = computed<string>(() => context.root.$route.params.id);
+  setup() {
+    const { t } = useI18n();
+    const route = useRoute();
+
+    const id = computed<string>(() => route.params.id as string);
 
     const [fetchPost, { data: log }] = useResource<Nullable<CommandLog>>({
       fetchResource: () => getCommandLogDetails(Number(id.value)),
       initialValue: null,
-      context,
-      resourceName: 'Post',
+      resourceName: 'Command Log',
     });
 
     onMounted(() => {
@@ -115,20 +120,25 @@ export default defineComponent({
   &.failed {
     background: rgba(255, 0, 0, 0.58);
   }
+
   &.finished {
     background: #679bff;
   }
+
   &.started {
     background: #9f9f9f;
   }
 }
+
 .arguments_title {
   margin-bottom: 14px;
   display: block;
 }
+
 .arguments_wrap {
   margin-bottom: 20px;
 }
+
 .argument {
   display: flex;
   margin: 0px 5px 5px 0px;
@@ -140,11 +150,13 @@ export default defineComponent({
     padding: 2px;
     border-radius: 4px 0px 0px 4px;
   }
+
   .argument_value {
     background: #ececec;
     padding: 2px;
     border-radius: 0px 4px 4px 0px;
   }
+
   .argument_null {
     background: #fcc;
     padding: 2px;

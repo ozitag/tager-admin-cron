@@ -1,26 +1,26 @@
 <template>
-  <page :title="t('pages:commandExecute')">
+  <Page :title="t('cron:commandExecute')">
     <div v-if="command" class="select-row">
       <h3>{{ command.signature }}</h3>
       <small>{{ command.description }}</small>
       <div class="params">
         <div v-for="argument in args" :key="argument.name" class="param">
-          <base-select
+          <BaseSelect
             v-if="argument.values.length"
-            v-model="argument.value"
+            v-model:value="argument.value"
             :options="argument.values"
             :placeholder="argument.name"
           />
-          <base-input
+          <BaseInput
             v-else
             :key="argument.name"
-            v-model="argument.value"
+            v-model:value="argument.value"
             :placeholder="argument.name"
           />
         </div>
-        <base-button :disabled="isSubmitting" @click="executeCommandHandler">{{
-          t('pages:execute')
-        }}</base-button>
+        <BaseButton :disabled="isSubmitting" @click="executeCommandHandler"
+          >{{ t('cron:execute') }}
+        </BaseButton>
       </div>
       <CronScreen
         :content="response"
@@ -29,20 +29,21 @@
         :input-content="getInputString(command.signature, args)"
       />
     </div>
-  </page>
+  </Page>
 </template>
 
 <script lang="ts">
-import {
-  computed,
-  defineComponent,
-  onMounted,
-  ref,
-  watch,
-} from '@vue/composition-api';
+import { computed, defineComponent, onMounted, ref, watch } from 'vue';
+import { useRoute } from 'vue-router';
 
-import { useTranslation } from '@tager/admin-ui';
-import { Nullable, useResource } from '@tager/admin-services';
+import { BaseButton, BaseInput, BaseSelect } from '@tager/admin-ui';
+import {
+  Nullable,
+  useI18n,
+  useResource,
+  useToast,
+} from '@tager/admin-services';
+import { Page } from '@tager/admin-layout';
 
 import { executeCommand, getCommandDetails } from '../../../services/requests';
 import { Command } from '../../../typings/model';
@@ -52,13 +53,18 @@ import { getStatusLabel } from '../../../utils/helper';
 export default defineComponent({
   name: 'CommandDetails',
   components: {
+    BaseButton,
+    BaseInput,
+    BaseSelect,
+    Page,
     CronScreen,
   },
-  setup(props, context) {
-    const { t } = useTranslation(context);
-    const signature = computed<string>(
-      () => context.root.$route.params.signature
-    );
+  setup() {
+    const { t } = useI18n();
+    const route = useRoute();
+    const toast = useToast();
+
+    const signature = computed<string>(() => route.params.signature as string);
     const response = ref<string | null>(null);
     const args = ref<any[]>([]);
     const isSubmitting = ref<boolean>(false);
@@ -66,7 +72,6 @@ export default defineComponent({
     const [fetchPost, { data: command }] = useResource<Nullable<Command>>({
       fetchResource: () => getCommandDetails(signature.value),
       initialValue: null,
-      context,
     });
 
     onMounted(() => {
@@ -103,19 +108,19 @@ export default defineComponent({
       response.value = 'In progress...';
       executeCommand(body)
         .then((res) => {
-          context.root.$toast({
+          toast.show({
             variant: 'success',
-            title: t('pages:success'),
-            body: t('pages:execSuccessMessage'),
+            title: t('cron:success'),
+            body: t('cron:execSuccessMessage'),
           });
           response.value = res.data.response;
         })
         .catch(() => {
           response.value = null;
-          context.root.$toast({
+          toast.show({
             variant: 'danger',
-            title: t('pages:error'),
-            body: t('pages:execErrorMessage'),
+            title: t('cron:error'),
+            body: t('cron:execErrorMessage'),
           });
         })
         .finally(() => {

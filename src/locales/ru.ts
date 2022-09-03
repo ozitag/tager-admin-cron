@@ -1,8 +1,7 @@
-import EN from './en';
+import { EN } from './en';
 
-const RU: typeof EN = {
+export const RU: typeof EN = {
   home: 'Home',
-  pages: 'Pages',
   createPage: 'Create page',
   viewPage: 'View Page',
   cron: 'Команды',
@@ -47,5 +46,3 @@ const RU: typeof EN = {
   execSuccessMessage: 'Команда выполнена',
   execErrorMessage: 'Команда не выполнена',
 };
-
-export default RU;

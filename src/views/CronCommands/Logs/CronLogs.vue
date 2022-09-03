@@ -1,6 +1,6 @@
 <template>
-  <page :title="t('pages:cronLogs')">
-    <data-table
+  <Page :title="t('cron:cronLogs')">
+    <DataTable
       :column-defs="columnDefs"
       :row-data="rowData"
       :error-message="errorMessage"
@@ -13,89 +13,92 @@
       }"
       @change="handleChange"
     >
-      <template v-slot:filters>
-        <advanced-search>
+      <template #filters>
+        <AdvancedSearch>
           <div class="filters">
-            <form-field-multi-select
-              v-model="commandFilter"
+            <FormFieldMultiSelect
+              v-model:selected-options="commandFilter"
               :options="commandsList"
               name="categoryFilter"
               :searchable="true"
-              :label="t('pages:signature')"
+              :label="t('cron:command')"
               class="filter"
             />
 
-            <div class="filter">
-              <div class="date-label">
-                {{ $t('pages:dateOfPublication') }}
-              </div>
-
-              <div class="date-content">
-                <form-field
-                  v-model="dateFromFilter"
-                  :label="t('pages:from')"
-                  name="fromDateFilter"
-                  type="date"
-                  :max="dateToFilter"
-                />
-
-                <form-field
-                  v-model="dateToFilter"
-                  :label="t('pages:to')"
-                  name="toDateFilter"
-                  type="date"
-                  :min="dateFromFilter"
-                />
-              </div>
-            </div>
-
-            <form-field-multi-select
-              v-model="statusFilter"
+            <FormFieldMultiSelect
+              v-model:selected-options="statusFilter"
               :options="statusOptionFilters"
               name="statusFilter"
               :searchable="true"
-              :label="t('pages:status')"
+              :label="t('cron:status')"
               class="filter"
             />
           </div>
-        </advanced-search>
+
+          <div class="filters">
+            <FormField
+              v-model:value="dateFromFilter"
+              :label="t('cron:from')"
+              name="fromDateFilter"
+              type="date"
+              :max="dateToFilter"
+            />
+
+            <FormField
+              v-model:value="dateToFilter"
+              :label="t('cron:to')"
+              name="toDateFilter"
+              type="date"
+              :min="dateFromFilter"
+            />
+          </div>
+        </AdvancedSearch>
       </template>
 
-      <template v-slot:cell(status)="{ row }">
+      <template #cell(status)="{ row }">
         <div :class="['status', getStatusLabel(row.status)]">
           {{ getStatusLabel(row.status) }}
         </div>
       </template>
-      <template v-slot:cell(hasoutput)="{ row }">
+      <template #cell(hasoutput)="{ row }">
         <div>
-          <base-button v-if="row.hasoutput" :href="getCronDetailsUrl(row.id)">
-            {{ t('pages:view') }}
-          </base-button>
+          <BaseButton v-if="row.hasoutput" :href="getCronDetailsUrl(row.id)">
+            {{ t('cron:view') }}
+          </BaseButton>
         </div>
       </template>
-      <template v-slot:cell(actions)="{ row }">
-        <base-button
+      <template #cell(actions)="{ row }">
+        <BaseButton
           variant="icon"
-          :title="t('pages:view')"
+          :title="t('cron:view')"
           :href="getCronDetailsUrl(row.id)"
         >
           <EyeIcon />
-        </base-button>
+        </BaseButton>
       </template>
-    </data-table>
-  </page>
+    </DataTable>
+  </Page>
 </template>
 
 <script lang="ts">
-import { defineComponent, watch } from '@vue/composition-api';
+import { defineComponent, watch } from 'vue';
 import pick from 'lodash/pick';
 import isEqual from 'lodash/isEqual';
+import { useRoute, useRouter } from 'vue-router';
 
-import { useDataTable, useTranslation } from '@tager/admin-ui';
+import {
+  AdvancedSearch,
+  BaseButton,
+  FormField,
+  FormFieldMultiSelect,
+  useDataTable,
+  DataTable,
+} from '@tager/admin-ui';
+import { Page } from '@tager/admin-layout';
+import { useI18n } from '@tager/admin-services';
 
 import { getCronLogs } from '../../../services/requests';
 import { CronLogShort } from '../../../typings/model';
-import CronSelect from '../../../components/CronSelect';
 import { getCronDetailsUrl } from '../../../utils/paths';
 import { getStatusLabel } from '../../../utils/helper';
 import EyeIcon from '../../../components/EyeIcon/EyeIcon.vue';
@@ -107,10 +110,17 @@ export default defineComponent({
   name: 'CronLogs',
   components: {
     EyeIcon,
-    CronSelect,
+    BaseButton,
+    FormField,
+    FormFieldMultiSelect,
+    AdvancedSearch,
+    Page,
+    DataTable,
   },
   setup(props, context) {
-    const { t } = useTranslation(context);
+    const { t } = useI18n();
+    const route = useRoute();
+    const router = useRouter();
 
     const {
       filterParams,
@@ -120,7 +130,7 @@ export default defineComponent({
       statusFilter,
       commandFilter,
       commandsList,
-    } = useFilters(context);
+    } = useFilters(route);
 
     const {
       rowData: pageList,
@@ -142,19 +152,18 @@ export default defineComponent({
         });
       },
       initialValue: [],
-      context,
       resourceName: 'Page list',
       pageSize: 100,
     });
 
     watch(filterParams, () => {
       const newQuery = {
-        ...pick(context.root.$route.query, ['query', 'pageNumber']),
+        ...pick(route.query, ['query', 'pageNumber']),
         ...filterParams.value,
       };
 
-      if (!isEqual(context.root.$route.query, newQuery)) {
-        context.root.$router.replace({ query: newQuery });
+      if (!isEqual(route.query, newQuery)) {
+        router.replace({ query: newQuery });
         fetchList();
       }
     });
@@ -188,19 +197,15 @@ export default defineComponent({
 
 <style scoped lang="scss">
 .filters {
-  display: flex;
-  margin: 0 -10px;
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: 1fr 1fr;
 
   &:not(:first-child) {
     margin-top: 10px;
   }
-
-  .filter {
-    padding: 10px 10px 0;
-    width: 50%;
-    margin: 0;
-  }
 }
+
 .status {
   display: inline-block;
   padding: 2px 6px;
@@ -211,9 +216,11 @@ export default defineComponent({
   &.Failed {
     background: rgba(255, 0, 0, 0.58);
   }
+
   &.Finished {
     background: #679bff;
   }
+
   &.Started {
     background: #9f9f9f;
   }

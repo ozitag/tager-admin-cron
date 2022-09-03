@@ -1,14 +1,10 @@
 <template>
-  <page :title="t('pages:commandLogDetails') + (log ? ' ID ' + log.id : '')">
+  <Page :title="t('cron:commandLogDetails') + (log ? ' ID ' + log.id : '')">
     <div v-if="log">
-      <field-value
-        :label="t('pages:command')"
-        type="text"
-        :text="log.command"
-      />
-      <field-value :label="t('pages:class')" type="text" :text="log.class" />
-      <field-value
-        :label="t('pages:beginAt')"
+      <FieldValue :label="t('cron:command')" type="text" :text="log.command" />
+      <FieldValue :label="t('cron:class')" type="text" :text="log.class" />
+      <FieldValue
+        :label="t('cron:beginAt')"
         type="text"
         :text="
           new Date(log.begin_at).toLocaleDateString('ru-RU', {
@@ -21,8 +17,8 @@
           })
         "
       />
-      <field-value
-        :label="t('pages:endAt')"
+      <FieldValue
+        :label="t('cron:endAt')"
         type="text"
         :text="
           new Date(log.end_at).toLocaleDateString('ru-RU', {
@@ -35,32 +31,34 @@
           })
         "
       />
-      <field-value
-        :label="t('pages:status')"
+      <FieldValue
+        :label="t('cron:status')"
         type="text"
         :text="getStatusLabel(log.status)"
       />
 
-      <cron-screen
+      <CronScreen
         v-if="log.output"
         :content="log.output"
-        :title="t('pages:outputRes')"
+        :title="t('cron:outputRes')"
       />
       <cron-screen
         v-if="log.error"
         :content="log.error"
         type="danger"
-        :title="t('pages:outputError')"
+        :title="t('cron:outputError')"
       />
     </div>
-  </page>
+  </Page>
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, onMounted } from '@vue/composition-api';
+import { computed, defineComponent, onMounted } from 'vue';
+import { useRoute } from 'vue-router';
 
-import { useTranslation } from '@tager/admin-ui';
-import { Nullable, useResource } from '@tager/admin-services';
+import { Nullable, useI18n, useResource } from '@tager/admin-services';
+import { Page } from '@tager/admin-layout';
+import { FieldValue } from '@tager/admin-ui';
 
 import { getCronLogDetails } from '../../../services/requests';
 import { CronLog } from '../../../typings/model';
@@ -70,17 +68,20 @@ import { getStatusLabel } from '../../../utils/helper';
 export default defineComponent({
   name: 'CronDetails',
   components: {
+    FieldValue,
+    Page,
     CronScreen,
   },
-  setup(props, context) {
-    const { t } = useTranslation(context);
-    const id = computed<string>(() => context.root.$route.params.id);
+  setup() {
+    const { t } = useI18n();
+    const route = useRoute();
+
+    const id = computed<string>(() => route.params.id as string);
 
     const [fetchPost, { data: log }] = useResource<Nullable<CronLog>>({
       fetchResource: () => getCronLogDetails(Number(id.value)),
       initialValue: null,
-      context,
-      resourceName: 'Post',
+      resourceName: 'Cron Details',
     });
 
     onMounted(() => {
@@ -108,9 +109,11 @@ export default defineComponent({
   &.failed {
     background: rgba(255, 0, 0, 0.58);
   }
+
   &.finished {
     background: #679bff;
   }
+
   &.started {
     background: #9f9f9f;
   }
