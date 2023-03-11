@@ -4,54 +4,39 @@
       <FieldValue
         :label="t('cron:command')"
         type="text"
-        :text="log.signature"
+        :value="log.signature"
       />
-      <FieldValue
-        :label="t('cron:executionTime')"
-        type="text"
-        :text="log.execution_time + ' ' + t('cron:secondShort')"
-      />
-      <FieldValue
-        v-if="log.user"
-        :label="t('cron:user')"
-        type="text"
-        :text="log.user ? log.user.name : ''"
-      />
-      <FieldValue
-        :label="t('cron:status')"
-        type="text"
-        :text="getStatusLabel(log.status)"
-      />
-      <FieldValue
-        :label="t('cron:status')"
-        type="text"
-        :text="getStatusLabel(log.status)"
-      />
-      <FieldValue
-        v-if="log.created_at"
-        :label="t('cron:createdAt')"
-        type="text"
-        :text="
-          new Date(log.created_at).toLocaleDateString('ru-RU', {
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric',
-            hour: 'numeric',
-            minute: 'numeric',
-            second: 'numeric',
-          })
-        "
-      />
-      <div class="arguments_wrap">
-        <span class="arguments_title">{{ t('cron:arguments') }}: </span>
-        <div>
+      <FieldValue :label="t('cron:arguments')">
+        <template #value>
           <div v-for="(val, key) in log.arguments" :key="key" class="argument">
             <div class="argument_name">{{ key }}:</div>
             <div v-if="val" class="argument_value">{{ val }}</div>
             <div v-else class="argument_null"></div>
           </div>
-        </div>
-      </div>
+        </template>
+      </FieldValue>
+
+      <FieldValue
+        :label="t('cron:createdAt')"
+        type="datetime"
+        :value="log.created_at"
+      />
+      <FieldValue
+        :label="t('cron:executionTime')"
+        type="text"
+        :value="log.execution_time + ' ' + t('cron:secondShort')"
+      />
+      <FieldValue
+        v-if="log.user"
+        :label="t('cron:user')"
+        type="text"
+        :value="log.user ? log.user.name : ''"
+      />
+      <FieldValue
+        :label="t('cron:status')"
+        type="text"
+        :value="getStatusLabel(log.status)"
+      />
 
       <CronScreen
         v-if="log.output"
@@ -142,19 +127,26 @@ export default defineComponent({
 .argument {
   display: flex;
   margin: 0px 5px 5px 0px;
-  font-size: 12px;
+  font-size: 14px;
 
   .argument_name {
-    background: #33485e;
-    color: #fff;
-    padding: 2px;
+    background: #666;
     border-radius: 4px 0px 0px 4px;
+    min-width: 100px;
+    text-align: right;
+    padding: 4px 8px;
+    color: #fff;
   }
 
   .argument_value {
     background: #ececec;
-    padding: 2px;
+    padding: 4px 8px;
     border-radius: 0px 4px 4px 0px;
+    display: block;
+    white-space: pre-wrap;
+    overflow: hidden;
+    overflow-wrap: break-word;
+    min-width: 150px;
   }
 
   .argument_null {

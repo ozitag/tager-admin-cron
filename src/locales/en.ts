@@ -21,8 +21,8 @@ export const EN = {
   endAt: 'End At',
   status: 'Status',
   commandError: 'Error',
-  createdAt: 'Created At',
-  executionTime: 'Execution Time',
+  createdAt: 'Start',
+  executionTime: 'Time',
   user: 'User',
   arguments: 'Arguments',
 

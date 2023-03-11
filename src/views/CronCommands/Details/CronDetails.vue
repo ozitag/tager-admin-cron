@@ -1,12 +1,12 @@
 <template>
   <Page :title="t('cron:commandLogDetails') + (log ? ' ID ' + log.id : '')">
     <div v-if="log">
-      <FieldValue :label="t('cron:command')" type="text" :text="log.command" />
-      <FieldValue :label="t('cron:class')" type="text" :text="log.class" />
+      <FieldValue :label="t('cron:command')" type="text" :value="log.command" />
+      <FieldValue :label="t('cron:class')" type="text" :value="log.class" />
       <FieldValue
         :label="t('cron:beginAt')"
         type="text"
-        :text="
+        :value="
           new Date(log.begin_at).toLocaleDateString('ru-RU', {
             year: 'numeric',
             month: 'long',
@@ -20,7 +20,7 @@
       <FieldValue
         :label="t('cron:endAt')"
         type="text"
-        :text="
+        :value="
           new Date(log.end_at).toLocaleDateString('ru-RU', {
             year: 'numeric',
             month: 'long',
@@ -34,7 +34,7 @@
       <FieldValue
         :label="t('cron:status')"
         type="text"
-        :text="getStatusLabel(log.status)"
+        :value="getStatusLabel(log.status)"
       />
 
       <CronScreen

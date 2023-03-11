@@ -25,8 +25,8 @@
               class="filter"
             />
 
-            <form-field-multi-select
-              v-model="statusFilter"
+            <FormFieldMultiSelect
+              v-model:selected-options="statusFilter"
               :options="statusOptionFilters"
               name="statusFilter"
               :searchable="true"
@@ -59,16 +59,9 @@
           {{ getStatusLabel(row.status) }}
         </div>
       </template>
-      <template #cell(arguments)="{ row }">
-        <div v-for="(val, key) in row.arguments" :key="key" class="argument">
-          <div class="argument_name">{{ key }}:</div>
-          <div v-if="val" class="argument_value">{{ val }}</div>
-          <div v-else class="argument_null"></div>
-        </div>
-      </template>
       <template #cell(execution-time)="{ row }">
         <span v-if="row.execution_time"
-          >{{ row.execution_time }} {{ t('cron:secondShort') }}</span
+          >{{ row.execution_time.toFixed(2) }} {{ t('cron:secondShort') }}</span
         >
       </template>
       <template #cell(actions)="{ row }">
@@ -227,29 +220,6 @@ export default defineComponent({
 
   &.Started {
     background: #9f9f9f;
-  }
-}
-
-.argument {
-  display: flex;
-  margin: 0px 5px 5px 0px;
-
-  .argument_name {
-    background: #f7f7f7;
-    padding: 2px;
-    border-radius: 4px 0px 0px 4px;
-  }
-
-  .argument_value {
-    background: #ececec;
-    padding: 2px;
-    border-radius: 0px 4px 4px 0px;
-  }
-
-  .argument_null {
-    background: #fcc;
-    padding: 2px;
-    border-radius: 0px 4px 4px 0px;
   }
 }
 </style>

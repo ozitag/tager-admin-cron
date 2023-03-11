@@ -23,8 +23,8 @@ export const RU: typeof EN = {
   endAt: 'Конец',
   status: 'Статус',
   commandError: 'Ошибка',
-  createdAt: 'Выполнено в',
-  executionTime: 'Время выполнения',
+  createdAt: 'Старт',
+  executionTime: 'Время',
   user: 'Пользователь',
   arguments: 'Параметры',
 
