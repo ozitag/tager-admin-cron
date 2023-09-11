@@ -12,9 +12,7 @@
       </div>
       <div class="screen">
         <p class="pre_res">
-          <span
-            >root@127.0.0.1:~$ <i>{{ inputContent }}</i></span
-          >
+          <span>root@hostname:~$ <i>{{ inputContent }}</i></span>
         </p>
         <div v-if="useHtml" class="res" v-html="content"></div>
         <div v-else class="res">
@@ -105,7 +103,7 @@ export default {
   .screen {
     background-color: #33485e;
     width: 100%;
-    min-height: 100px;
+    min-height: 300px;
     max-height: 450px;
     overflow: hidden;
     overflow-x: scroll;

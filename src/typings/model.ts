@@ -3,6 +3,7 @@ export interface CommandLogShort {
   readonly signature: string;
   readonly status: string;
   readonly created_at: string;
+  readonly execution_time: number;
   readonly arguments: object;
   readonly hasoutput: boolean;
   readonly user: null | {

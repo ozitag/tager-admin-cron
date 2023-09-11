@@ -1,26 +1,23 @@
 <template>
-  <Page :title="t('cron:commandExecute')">
+  <Page :title="t('cron:commandExecute')" :is-content-loading="initialLoading">
     <div v-if="command" class="select-row">
       <h3>{{ command.signature }}</h3>
       <small>{{ command.description }}</small>
-      <div class="params">
+      <hr/>
+      <div class="row-cols-3">
         <div v-for="argument in args" :key="argument.name" class="param">
           <BaseSelect
             v-if="argument.values.length"
             v-model:value="argument.value"
             :options="argument.values"
-            :placeholder="argument.name"
           />
-          <BaseInput
+          <FormField
             v-else
+            :label="argument.name"
             :key="argument.name"
             v-model:value="argument.value"
-            :placeholder="argument.name"
           />
         </div>
-        <BaseButton :disabled="isSubmitting" @click="executeCommandHandler"
-          >{{ t('cron:execute') }}
-        </BaseButton>
       </div>
       <CronScreen
         :content="response"
@@ -29,6 +26,18 @@
         :input-content="getInputString(command.signature, args)"
       />
     </div>
+
+    <template #footer>
+      <FormFooter v-if="!initialLoading"
+        back-href="/"
+        :is-submitting="isSubmitting"
+        :is-creation="true"
+        :can-create-another="false"
+        :save-and-exit-label="null"
+        :submit-label="t('cron:execute')"
+        @submit="executeCommandHandler"
+      />
+    </template>
   </Page>
 </template>
 
@@ -36,7 +45,7 @@
 import { computed, defineComponent, onMounted, ref, watch } from 'vue';
 import { useRoute } from 'vue-router';
 
-import { BaseButton, BaseInput, BaseSelect } from '@tager/admin-ui';
+import { BaseButton, BaseInput, BaseSelect, FormField, FormFieldSingleSelect, FormFooter } from '@tager/admin-ui';
 import {
   Nullable,
   useI18n,
@@ -49,6 +58,7 @@ import { executeCommand, getCommandDetails } from '../../../services/requests';
 import { Command } from '../../../typings/model';
 import CronScreen from '../../../components/CronScreen';
 import { getStatusLabel } from '../../../utils/helper';
+import { getCommandsListUrl } from '../../../utils/paths';
 
 export default defineComponent({
   name: 'CommandDetails',
@@ -57,7 +67,10 @@ export default defineComponent({
     BaseInput,
     BaseSelect,
     Page,
+    FormFieldSingleSelect,
+    FormField,
     CronScreen,
+    FormFooter,
   },
   setup() {
     const { t } = useI18n();
@@ -69,13 +82,13 @@ export default defineComponent({
     const args = ref<any[]>([]);
     const isSubmitting = ref<boolean>(false);
 
-    const [fetchPost, { data: command }] = useResource<Nullable<Command>>({
+    const [fetchCommand, { data: command, loading }] = useResource<Nullable<Command>>({
       fetchResource: () => getCommandDetails(signature.value),
       initialValue: null,
     });
 
     onMounted(() => {
-      fetchPost();
+      fetchCommand();
     });
 
     watch(command, () => {
@@ -134,18 +147,14 @@ export default defineComponent({
         .filter((u) =>
           u.value && typeof u.value !== 'string' ? u.value.value : u.value
         )
-        .map(
-          (u) =>
-            u.name +
-            '=' +
-            (u.value && typeof u.value !== 'string' ? u.value.value : u.value)
-        )
+        .map((u) => (u.value && typeof u.value !== 'string' ? u.value.value : u.value))
         .join(' ');
       return _res + _args;
     };
 
     return {
       origin,
+      initialLoading: loading,
       getStatusLabel,
       command,
       executeCommandHandler,
@@ -154,12 +163,16 @@ export default defineComponent({
       getInputString,
       response,
       t,
+      backUrl: getCommandsListUrl()
     };
   },
 });
 </script>
 
 <style scoped lang="scss">
+h3{
+  margin-bottom: 10px;
+}
 .params {
   display: flex;
   margin: 10px 0 20px 0;
