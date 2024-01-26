@@ -31,10 +31,11 @@
           })
         "
       />
+
       <FieldValue
         :label="t('cron:status')"
         type="text"
-        :value="getStatusLabel(log.status)"
+        :value="getCommandStatusLabel(log.status, t)"
       />
 
       <CronScreen
@@ -42,7 +43,7 @@
         :content="log.output"
         :title="t('cron:outputRes')"
       />
-      <cron-screen
+      <CronScreen
         v-if="log.error"
         :content="log.error"
         type="danger"
@@ -60,10 +61,10 @@ import { Nullable, useI18n, useResource } from '@tager/admin-services';
 import { Page } from '@tager/admin-layout';
 import { FieldValue } from '@tager/admin-ui';
 
-import { getCronLogDetails } from '../../../services/requests';
-import { CronLog } from '../../../typings/model';
-import CronScreen from '../../../components/CronScreen';
-import { getStatusLabel } from '../../../utils/helper';
+import { getCronLogDetails } from '../../services/requests';
+import { CronLog } from '../../typings/model';
+import CronScreen from '../../components/CronScreen';
+import { getCommandStatusLabel } from '../../utils/helper';
 
 export default defineComponent({
   name: 'CronDetails',
@@ -90,7 +91,7 @@ export default defineComponent({
 
     return {
       origin,
-      getStatusLabel,
+      getCommandStatusLabel,
       log,
       t,
     };
@@ -105,17 +106,5 @@ export default defineComponent({
   border-radius: 5px;
   font-size: 11px;
   color: #fff;
-
-  &.failed {
-    background: rgba(255, 0, 0, 0.58);
-  }
-
-  &.finished {
-    background: #679bff;
-  }
-
-  &.started {
-    background: #9f9f9f;
-  }
 }
 </style>

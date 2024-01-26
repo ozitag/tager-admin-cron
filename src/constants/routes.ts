@@ -3,17 +3,17 @@ import { type RouteRecordRaw } from 'vue-router';
 import {
   getCronDetailsUrlRaw,
   getCommandLogDetailsUrlRaw,
-  getCommandDetailsUrlRaw,
+  getCommandExecuteUrl,
   getCommandsListUrl,
   getCommandsLogsUrl,
   getCronLogsUrl,
 } from '../utils/paths';
-import CommandLogs from '../views/Commands/Logs';
-import CommandLogDetails from '../views/Commands/LogDetails';
-import CronLogs from '../views/CronCommands/Logs';
-import CommandList from '../views/Commands/List';
-import CronDetails from '../views/CronCommands/Details';
-import CommandDetails from '../views/Commands/Details';
+import CommandLogs from '../views/CommandsLogs';
+import CommandLogDetails from '../views/CommandsLogsDetails';
+import CronLogs from '../views/CronLogs';
+import CommandsList from '../views/CommandsList';
+import CronDetails from '../views/CronLogsDetails';
+import CommandExecute from '../views/CommandsExecute';
 
 import { PAGES_ROUTE_PATHS } from './paths';
 
@@ -69,7 +69,7 @@ export const PAGE_CRON_LOG_DETAILS_ROUTE: RouteRecordRaw = {
 
 export const PAGE_COMMANDS_ROUTE: RouteRecordRaw = {
   path: getCommandsListUrl(),
-  component: CommandList,
+  component: CommandsList,
   name: 'Page Commands',
   meta: {
     getBreadcrumbs: (route, { t }) => [
@@ -80,8 +80,8 @@ export const PAGE_COMMANDS_ROUTE: RouteRecordRaw = {
 };
 
 export const PAGE_COMMANDS_DETAILS_ROUTE: RouteRecordRaw = {
-  path: getCommandDetailsUrlRaw(),
-  component: CommandDetails,
+  path: getCommandExecuteUrl(),
+  component: CommandExecute,
   name: 'Commands Execute',
   meta: {
     getBreadcrumbs: (route, { t }) => [

@@ -8,7 +8,7 @@ import {
   OptionType,
 } from '@tager/admin-ui';
 
-import { getCronCommandsList } from '../../../../services/requests';
+import { getCronCommandsList } from '../../../services/requests';
 
 export const useFilters = (route: RouteLocationNormalizedLoaded) => {
   const [fetchTemplateList, { data: _commandsList }] = useResource({

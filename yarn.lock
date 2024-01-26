@@ -1153,38 +1153,39 @@
   resolved "https://registry.yarnpkg.com/@sphinxxxx/color-conversion/-/color-conversion-2.2.2.tgz#03ecc29279e3c0c832f6185a5bfa3497858ac8ca"
   integrity sha512-XExJS3cLqgrmNBIP3bBw6+1oQ1ksGjFh0+oClDKFYpCCqx/hlqwWO5KO/S63fzUo67SxI9dMrF0y5T/Ey7h8Zw==
 
-"@tager/admin-dynamic-field@^1.1.2":
-  version "1.1.2"
-  resolved "https://registry.yarnpkg.com/@tager/admin-dynamic-field/-/admin-dynamic-field-1.1.2.tgz#27c1db5db8a4cd41805b6e38fef23e9a1c04520f"
-  integrity sha512-0iej5IcfNoDXPDagDIWRlyyP1gqXvWYuAloNMuqBgF3jZA4Vv8msuHrqqFKb997EZIv4Oo5s2kuuK3JcTxbtcw==
+"@tager/admin-dynamic-field@^1.1.4":
+  version "1.1.4"
+  resolved "https://registry.yarnpkg.com/@tager/admin-dynamic-field/-/admin-dynamic-field-1.1.4.tgz#e6f07e9f5765a3e5955a4365669e69a54fb99d0d"
+  integrity sha512-OXZ1wutERO3iPQ1zVwc8rJhywijX9blAPJcWi+GWo4TLBPX6hXB946qjjYn8PfGUHDkhkZTjls1XO/2FmnPslw==
   dependencies:
     lodash.kebabcase "^4.1.1"
 
-"@tager/admin-layout@^1.0.14":
-  version "1.0.14"
-  resolved "https://registry.yarnpkg.com/@tager/admin-layout/-/admin-layout-1.0.14.tgz#1928a61416b45afc88b0c343e444009cc53565c3"
-  integrity sha512-VqrABAymHo4NFuzIN+591DmYZ5X4/2KGC0S0x1SSQ9W3+8BmlWVQaQ94yEYEx5l2XZlcy6Zl2c4UQBIA8JKXdg==
+"@tager/admin-layout@^1.0.23":
+  version "1.0.23"
+  resolved "https://registry.yarnpkg.com/@tager/admin-layout/-/admin-layout-1.0.23.tgz#ffe85a9f066c78c2c812a74585fcfeae3adbabae"
+  integrity sha512-XlbCIi0NNKPtQg0W2KA+Rfjj/PcUmP81/cK8/Pc0urNCEqwNb8KBaFEOVqWciWs77ns6hE04wf91pf+Bkdfx9w==
 
-"@tager/admin-services@1.1.12", "@tager/admin-services@^1.1.12":
-  version "1.1.12"
-  resolved "https://registry.yarnpkg.com/@tager/admin-services/-/admin-services-1.1.12.tgz#de6c4d965acef1d6e1685bcaa10aedc94de6d69a"
-  integrity sha512-LuuZ6vzJhnDgzrkHfGltETg6tjMYsbktwiNyFdWy+fWsetQiLolnzCjPqWLweMHik0ohFwC1vNFZVUGv8VRxrQ==
+"@tager/admin-services@^1.1.17", "@tager/admin-services@workspace:*":
+  version "1.1.17"
+  resolved "https://registry.yarnpkg.com/@tager/admin-services/-/admin-services-1.1.17.tgz#a8e36307a9225ee35f6a47fbe666be6a3b1dc296"
+  integrity sha512-AMDn98NmMniWbDXJTQNLsWv9CxdcezBlONt2g9WRz2bkUJbtWmRD6+86NiXkjACuZyevtwO5aMN+c+7TC3FO2g==
   dependencies:
     i18next "^21.9.1"
     nanoid "^4.0.0"
     zod "^3.18.0"
 
-"@tager/admin-ui@^1.0.74":
-  version "1.0.74"
-  resolved "https://registry.yarnpkg.com/@tager/admin-ui/-/admin-ui-1.0.74.tgz#7a9582bc7d6b5f4794290e6437dd66f68fa991d5"
-  integrity sha512-6IGQZ0kq4E3pPcYortQqWxNuhbIKaJYDwRpOd1eLcl1EBYsIDH8yMb1X2aAbS5LhTnRs2wuELCiHYlO9oOGm5Q==
+"@tager/admin-ui@^1.0.123":
+  version "1.0.123"
+  resolved "https://registry.yarnpkg.com/@tager/admin-ui/-/admin-ui-1.0.123.tgz#e4e96513c507b511ef587dcc2617190fdef97c76"
+  integrity sha512-QvmDY+x7iMPwdl3MjouxEde3fggxJEod9CVopj6xX+UYHQDqa7zZyGCAd0PJO2gpRZ5W0Z7dvS8jYTPFnGdVAA==
   dependencies:
     "@ckeditor/ckeditor5-vue" "^4.0.1"
     "@floating-ui/dom" "^0.4.5"
-    "@tager/admin-services" "1.1.12"
+    "@tager/admin-services" "1.1.17"
     "@tager/admin-wysiwyg" "^1.0.0"
     autosize "^5.0.1"
     leaflet "^1.8.0"
+    libphonenumber-js "^1.10.28"
     lodash-es "*"
     smoothscroll-polyfill "^0.4.4"
     sortablejs "^1.15.0"
@@ -4541,6 +4542,11 @@ levn@^0.4.1:
   dependencies:
     prelude-ls "^1.2.1"
     type-check "~0.4.0"
+
+libphonenumber-js@^1.10.28:
+  version "1.10.54"
+  resolved "https://registry.yarnpkg.com/libphonenumber-js/-/libphonenumber-js-1.10.54.tgz#8dfba112f49d1b9c2a160e55f9697f22e50f0841"
+  integrity sha512-P+38dUgJsmh0gzoRDoM4F5jLbyfztkU6PY6eSK6S5HwTi/LPvnwXqVCQZlAy1FxZ5c48q25QhxGQ0pq+WQcSlQ==
 
 lilconfig@^2.0.3:
   version "2.0.6"

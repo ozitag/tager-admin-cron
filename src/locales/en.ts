@@ -3,13 +3,13 @@ export const EN = {
   createPage: 'Create page',
   viewPage: 'View Page',
   cron: 'Commands',
-  cronLogs: 'Cron Logs',
-  cronLogDetails: 'Cron Log',
-  commandsLogs: 'Commands Logs',
+  cronLogs: 'CRON Logs',
+  cronLogDetails: 'CRON Log',
+  commandsLogs: 'Commands: Logs',
   commandLogDetails: 'Command Log',
   commandExecute: 'Command Execute',
   execute: 'Execute',
-  commands: 'Commands List',
+  commands: 'Commands',
   view: 'View',
   secondShort: 'sec.',
 
@@ -43,6 +43,16 @@ export const EN = {
 
   execSuccessMessage: 'Command executed',
   execErrorMessage: 'Command execution failed',
+
+  runInBackgroundLabel: 'Run in Background',
+  runInBackgroundDescription: 'Commands which run more than 10 sec. must be run in background',
+
+  duration: 'Duration',
+
+  statusCompleted: 'Completed',
+  statusWaiting: 'Waiting',
+  statusFailure: 'Failure',
+  statusStarted: 'Started'
 };
 
 export default EN;

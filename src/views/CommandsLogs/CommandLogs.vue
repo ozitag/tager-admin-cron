@@ -34,30 +34,7 @@
               class="filter"
             />
           </div>
-          <div class="filters">
-            <FormField
-              v-model:value="dateFromFilter"
-              :label="t('cron:from')"
-              name="fromDateFilter"
-              type="date"
-              :max="dateToFilter"
-            />
-
-            <FormField
-              v-model:value="dateToFilter"
-              :label="t('cron:to')"
-              name="toDateFilter"
-              type="date"
-              :min="dateFromFilter"
-            />
-          </div>
         </AdvancedSearch>
-      </template>
-
-      <template #cell(status)="{ row }">
-        <div :class="['status', getStatusLabel(row.status)]">
-          {{ getStatusLabel(row.status) }}
-        </div>
       </template>
       <template #cell(execution-time)="{ row }">
         <span v-if="row.execution_time"
@@ -94,14 +71,14 @@ import {
 import { Page } from '@tager/admin-layout';
 import { useI18n } from '@tager/admin-services';
 
-import { getCommandsLogs } from '../../../services/requests';
-import { CommandLogShort } from '../../../typings/model';
-import { getCommandLogDetailsUrl } from '../../../utils/paths';
-import EyeIcon from '../../../components/EyeIcon/EyeIcon.vue';
-import { getStatusLabel } from '../../../utils/helper';
+import { getCommandsLogs } from '../../services/requests';
+import { CommandLogShort } from '../../typings/model';
+import { getCommandLogDetailsUrl } from '../../utils/paths';
+import EyeIcon from '../../components/EyeIcon/EyeIcon.vue';
+import { getCommandStatusColor, getCommandStatusLabel } from '../../utils/helper';
 
 import { getColumnDefs } from './CommandLogs.helpers';
-import { useFilters } from './Hooks/useFilters';
+import { useFilters } from './hooks/useFilters';
 
 export default defineComponent({
   name: 'CommandLogs',
@@ -121,8 +98,6 @@ export default defineComponent({
 
     const {
       filterParams,
-      dateFromFilter,
-      dateToFilter,
       statusOptionFilters,
       statusFilter,
       commandFilter,
@@ -178,11 +153,8 @@ export default defineComponent({
       pageCount,
       pageNumber,
       commandFilter,
-      dateToFilter,
-      dateFromFilter,
       statusFilter,
       commandsList,
-      getStatusLabel,
       getCommandLogDetailsUrl,
       statusOptionFilters,
       isLoading,
@@ -209,17 +181,5 @@ export default defineComponent({
   border-radius: 5px;
   font-size: 11px;
   color: #fff;
-
-  &.Failed {
-    background: rgba(255, 0, 0, 0.58);
-  }
-
-  &.Finished {
-    background: #679bff;
-  }
-
-  &.Started {
-    background: #9f9f9f;
-  }
 }
 </style>

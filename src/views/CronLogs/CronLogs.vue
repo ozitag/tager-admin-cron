@@ -55,11 +55,6 @@
         </AdvancedSearch>
       </template>
 
-      <template #cell(status)="{ row }">
-        <div :class="['status', getStatusLabel(row.status)]">
-          {{ getStatusLabel(row.status) }}
-        </div>
-      </template>
       <template #cell(hasoutput)="{ row }">
         <div>
           <BaseButton v-if="row.hasoutput" :href="getCronDetailsUrl(row.id)">
@@ -97,14 +92,13 @@ import {
 import { Page } from '@tager/admin-layout';
 import { useI18n } from '@tager/admin-services';
 
-import { getCronLogs } from '../../../services/requests';
-import { CronLogShort } from '../../../typings/model';
-import { getCronDetailsUrl } from '../../../utils/paths';
-import { getStatusLabel } from '../../../utils/helper';
-import EyeIcon from '../../../components/EyeIcon/EyeIcon.vue';
+import { getCronLogs } from '../../services/requests';
+import { CronLogShort } from '../../typings/model';
+import { getCronDetailsUrl } from '../../utils/paths';
+import EyeIcon from '../../components/EyeIcon/EyeIcon.vue';
 
 import { getColumnDefs } from './CronLogs.helpers';
-import { useFilters } from './Hooks/useFilters';
+import { useFilters } from './hooks/useFilters';
 
 export default defineComponent({
   name: 'CronLogs',
@@ -180,7 +174,6 @@ export default defineComponent({
       pageSize,
       pageCount,
       pageNumber,
-      getStatusLabel,
       getCronDetailsUrl,
       t,
       dateFromFilter,

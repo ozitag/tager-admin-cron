@@ -4,6 +4,7 @@
       <h3>{{ command.signature }}</h3>
       <small>{{ command.description }}</small>
       <hr/>
+
       <div class="row-cols-3">
         <div v-for="argument in args" :key="argument.name" class="param">
           <BaseSelect
@@ -19,6 +20,9 @@
           />
         </div>
       </div>
+
+      <FormFieldOptionsSwitcherTrueFalse v-model:value="async" :label="$i18n.t('cron:runInBackgroundLabel')" :description="$i18n.t('cron:runInBackgroundDescription')" />
+
       <CronScreen
         :content="response"
         :use-html="true"
@@ -43,25 +47,25 @@
 
 <script lang="ts">
 import { computed, defineComponent, onMounted, ref, watch } from 'vue';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 
-import { BaseButton, BaseInput, BaseSelect, FormField, FormFieldSingleSelect, FormFooter } from '@tager/admin-ui';
+import { BaseButton, BaseInput, BaseSelect, FormField, FormFieldSingleSelect, FormFooter, FormFieldOptionsSwitcherTrueFalse } from '@tager/admin-ui';
 import {
+  navigateBack,
   Nullable,
   useI18n,
   useResource,
-  useToast,
+  useToast
 } from '@tager/admin-services';
 import { Page } from '@tager/admin-layout';
 
-import { executeCommand, getCommandDetails } from '../../../services/requests';
-import { Command } from '../../../typings/model';
-import CronScreen from '../../../components/CronScreen';
-import { getStatusLabel } from '../../../utils/helper';
-import { getCommandsListUrl } from '../../../utils/paths';
+import { executeCommand, getCommandDetails } from '../../services/requests';
+import { Command } from '../../typings/model';
+import CronScreen from '../../components/CronScreen';
+import { getCommandsListUrl, getCommandsLogsUrl } from '../../utils/paths';
 
 export default defineComponent({
-  name: 'CommandDetails',
+  name: 'CommandsExecute',
   components: {
     BaseButton,
     BaseInput,
@@ -71,16 +75,20 @@ export default defineComponent({
     FormField,
     CronScreen,
     FormFooter,
+    FormFieldOptionsSwitcherTrueFalse
   },
   setup() {
     const { t } = useI18n();
     const route = useRoute();
+    const router = useRouter();
     const toast = useToast();
 
     const signature = computed<string>(() => route.params.signature as string);
     const response = ref<string | null>(null);
     const args = ref<any[]>([]);
     const isSubmitting = ref<boolean>(false);
+
+    const async = ref<boolean>(false);
 
     const [fetchCommand, { data: command, loading }] = useResource<Nullable<Command>>({
       fetchResource: () => getCommandDetails(signature.value),
@@ -110,6 +118,7 @@ export default defineComponent({
     const executeCommandHandler = (): void => {
       const body = {
         command: command.value?.signature,
+        async: !!async.value,
         arguments: args.value.map((u) => ({
           name: u.name,
           value:
@@ -118,7 +127,8 @@ export default defineComponent({
       };
 
       isSubmitting.value = true;
-      response.value = 'In progress...';
+
+      response.value = 'Executing...';
       executeCommand(body)
         .then((res) => {
           toast.show({
@@ -126,10 +136,15 @@ export default defineComponent({
             title: t('cron:success'),
             body: t('cron:execSuccessMessage'),
           });
-          response.value = res.data.response;
+
+          if(body.async){
+            router.push(getCommandsLogsUrl());
+          } else {
+            response.value = res.data.response;
+          }
         })
-        .catch(() => {
-          response.value = null;
+        .catch((e) => {
+          response.value = e.message;
           toast.show({
             variant: 'danger',
             title: t('cron:error'),
@@ -155,7 +170,6 @@ export default defineComponent({
     return {
       origin,
       initialLoading: loading,
-      getStatusLabel,
       command,
       executeCommandHandler,
       isSubmitting,
@@ -163,7 +177,8 @@ export default defineComponent({
       getInputString,
       response,
       t,
-      backUrl: getCommandsListUrl()
+      backUrl: getCommandsListUrl(),
+      async
     };
   },
 });

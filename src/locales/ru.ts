@@ -5,10 +5,10 @@ export const RU: typeof EN = {
   createPage: 'Create page',
   viewPage: 'View Page',
   cron: 'Команды',
-  cronLogs: 'Cron Логи',
-  commandsLogs: 'Логи команд',
-  cronLogDetails: 'Лог команды',
-  commands: 'Список команд',
+  cronLogs: 'Логи CRON',
+  commandsLogs: 'Команды: Логи',
+  cronLogDetails: 'Логи CRON: Детали',
+  commands: 'Команды',
   commandLogDetails: 'Лог команды',
   execute: 'Выполнить',
   commandExecute: 'Выполнение команды',
@@ -45,4 +45,15 @@ export const RU: typeof EN = {
 
   execSuccessMessage: 'Команда выполнена',
   execErrorMessage: 'Команда не выполнена',
+
+
+  runInBackgroundLabel: 'Запустить в фоновом режиме',
+  runInBackgroundDescription: 'Команды, которые выполняются более 10 секунд должны запускаться в фоновом режиме',
+
+  duration: 'Длительность',
+
+  statusCompleted: 'Завершено',
+  statusWaiting: 'В ожидании',
+  statusFailure: 'Ошибка',
+  statusStarted: 'Выполняется'
 };

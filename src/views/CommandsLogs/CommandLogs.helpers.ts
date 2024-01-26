@@ -2,24 +2,61 @@ import { TFunction } from 'i18next';
 
 import { ColumnDefinition } from '@tager/admin-ui';
 
-import { getCommandLogDetailsUrl } from '../../../utils/paths';
+import { getCommandLogDetailsUrl } from '../../utils/paths';
+import { getCommandStatusColor, getCommandStatusLabel } from '../../utils/helper';
 
 export const getColumnDefs = (t: TFunction): Array<ColumnDefinition<any>> => [
+  {
+    id: 1,
+    name: 'ID',
+    field: 'id',
+    type: 'name',
+    width: '60px',
+    format: ({row}) => ({
+      adminLink: {
+        text: String(row.id),
+        url: getCommandLogDetailsUrl(row.id),
+      },
+    })
+  },
+
   {
     id: 3,
     name: t('cron:createdAt'),
     field: 'created_at',
     type: 'datetime',
-    width: '180px',
+    width: '168px',
   },
+
   {
     id: 5,
     name: t('cron:status'),
     field: 'status',
     width: '80px',
+    type: 'badge',
+    format: ({row}) => {
+      return {
+        textColor: '#fff',
+        color: getCommandStatusColor(row.status),
+        label: getCommandStatusLabel(row.status, t),
+      }
+    }
+  },
+  {
+    id: 4,
+    name: t('cron:duration'),
+    field: 'execution_time',
+    width: '135px',
     style: {
       whiteSpace: 'nowrap',
+      textAlign: 'center',
     },
+    headStyle:{
+      textAlign: 'center'
+    },
+    format: ({row}) => {
+      return row.execution_time.toFixed(2) + ' sec.'
+    }
   },
   {
     id: 1,
@@ -29,7 +66,7 @@ export const getColumnDefs = (t: TFunction): Array<ColumnDefinition<any>> => [
     format: ({ row }) => ({
       adminLink: {
         text: row.signature,
-        url: getCommandLogDetailsUrl(row.id),
+        url: null,
       },
       paramList: Object.keys(row.arguments).map((param) => {
         return {
@@ -42,16 +79,6 @@ export const getColumnDefs = (t: TFunction): Array<ColumnDefinition<any>> => [
         };
       }),
     }),
-    style: {
-      whiteSpace: 'nowrap',
-    },
-  },
-  {
-    id: 4,
-    name: t('cron:executionTime'),
-    field: 'execution_time',
-    width: '80px',
-
     style: {
       whiteSpace: 'nowrap',
     },

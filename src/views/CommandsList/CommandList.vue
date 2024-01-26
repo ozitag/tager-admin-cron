@@ -27,11 +27,11 @@ import { BaseButton, useDataTable, DataTable } from '@tager/admin-ui';
 import { Page } from '@tager/admin-layout';
 import { useI18n } from '@tager/admin-services';
 
-import { getCommandsList } from '../../../services/requests';
-import { getCommandDetailsUrl } from '../../../utils/paths';
-import ConsoleIcon from '../../../components/ConsoleIcon/ConsoleIcon.vue';
+import { getCommandsList } from '../../services/requests';
+import { getCommandDetailsUrl } from '../../utils/paths';
+import ConsoleIcon from '../../components/ConsoleIcon/ConsoleIcon.vue';
 
-import { getColumnDefs } from './CommandList.helper';
+import { getColumnDefs } from './CommandList.helpers';
 
 export default defineComponent({
   name: 'CommandList',

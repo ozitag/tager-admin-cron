@@ -30,7 +30,7 @@ export function getCommandDetailsUrl(signature: string) {
   return compile(PAGES_ROUTE_PATHS.PAGE_COMMANDS_DETAILS)({ signature });
 }
 
-export function getCommandDetailsUrlRaw() {
+export function getCommandExecuteUrl() {
   return PAGES_ROUTE_PATHS.PAGE_COMMANDS_DETAILS;
 }
 

@@ -35,7 +35,7 @@
       <FieldValue
         :label="t('cron:status')"
         type="text"
-        :value="getStatusLabel(log.status)"
+        :value="getCommandStatusLabel(log.status, t)"
       />
 
       <CronScreen
@@ -56,10 +56,10 @@ import { FieldValue } from '@tager/admin-ui';
 import { Nullable, useI18n, useResource } from '@tager/admin-services';
 import { Page } from '@tager/admin-layout';
 
-import { getCommandLogDetails } from '../../../services/requests';
-import { CommandLog } from '../../../typings/model';
-import CronScreen from '../../../components/CronScreen';
-import { getStatusLabel } from '../../../utils/helper';
+import { getCommandLogDetails } from '../../services/requests';
+import { CommandLog } from '../../typings/model';
+import CronScreen from '../../components/CronScreen';
+import { getCommandStatusLabel } from '../../utils/helper';
 
 export default defineComponent({
   name: 'CommandLogDetails',
@@ -86,7 +86,7 @@ export default defineComponent({
 
     return {
       origin,
-      getStatusLabel,
+      getCommandStatusLabel,
       log,
       t,
     };

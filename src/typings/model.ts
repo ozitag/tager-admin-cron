@@ -1,7 +1,9 @@
+import { CommandStatus } from '../utils/helper';
+
 export interface CommandLogShort {
   readonly id: number;
   readonly signature: string;
-  readonly status: string;
+  readonly status: CommandStatus;
   readonly created_at: string;
   readonly execution_time: number;
   readonly arguments: object;
@@ -18,7 +20,7 @@ export interface CommandLog extends CommandLogShort {
 export interface CronLogShort {
   readonly id: number;
   readonly command: string;
-  readonly status: string;
+  readonly status: CommandStatus;
   readonly begin_at: string;
   readonly end_at: string;
   readonly arguments: object;

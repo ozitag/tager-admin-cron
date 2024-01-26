@@ -8,7 +8,7 @@ import {
   OptionType,
 } from '@tager/admin-ui';
 
-import { getCommandsList } from '../../../../services/requests';
+import { getCommandsList } from '../../../services/requests';
 
 export const useFilters = (route: RouteLocationNormalizedLoaded) => {
   const [fetchTemplateList, { data: _commandsList }] = useResource({
@@ -35,18 +35,6 @@ export const useFilters = (route: RouteLocationNormalizedLoaded) => {
   });
   const commandFilter = ref<OptionType[]>(initialCommandFilter.value);
 
-  const initialDateFromFilter = computed(() => {
-    const value = getFilterParamAsStringArray(route.query, 'date-from');
-    return value.length > 0 ? value[0] : '';
-  });
-  const dateFromFilter = ref<string | null>(initialDateFromFilter.value);
-
-  const initialDateToFilter = computed(() => {
-    const value = getFilterParamAsStringArray(route.query, 'date-to');
-    return value.length > 0 ? value[0] : '';
-  });
-  const dateToFilter = ref<string | null>(initialDateToFilter.value);
-
   const statusOptionFilters = computed<OptionType[]>(() => [
     { label: 'Finished', value: 'FINISHED' },
     { label: 'Started', value: 'STARTED' },
@@ -66,21 +54,11 @@ export const useFilters = (route: RouteLocationNormalizedLoaded) => {
       ['status']: statusFilter.value.map(({ value }) => value),
     };
 
-    if (dateFromFilter.value) {
-      filters['date-from'] = dateFromFilter.value;
-    }
-
-    if (dateToFilter.value) {
-      filters['date-to'] = dateToFilter.value;
-    }
-
     return getFilterParams(filters);
   });
 
   return {
     filterParams,
-    dateFromFilter,
-    dateToFilter,
     statusOptionFilters,
     statusFilter,
     commandFilter,
