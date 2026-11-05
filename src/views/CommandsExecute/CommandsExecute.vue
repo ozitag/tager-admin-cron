@@ -14,9 +14,9 @@
           />
           <FormField
             v-else
-            :label="argument.name"
             :key="argument.name"
             v-model:value="argument.value"
+            :label="argument.name"
           />
         </div>
       </div>
@@ -32,7 +32,8 @@
     </div>
 
     <template #footer>
-      <FormFooter v-if="!initialLoading"
+      <FormFooter
+v-if="!initialLoading"
         back-href="/"
         :is-submitting="isSubmitting"
         :is-creation="true"

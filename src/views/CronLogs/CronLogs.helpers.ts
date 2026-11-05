@@ -1,6 +1,7 @@
 import { type TFunction } from 'i18next';
 
 import { type ColumnDefinition } from '@tager/admin-ui';
+
 import { getCronDetailsUrl } from '../../utils/paths';
 import { getCommandStatusColor, getCommandStatusLabel } from '../../utils/helper';
 

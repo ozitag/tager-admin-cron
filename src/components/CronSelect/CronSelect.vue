@@ -27,11 +27,10 @@ export default {
       required: true,
     },
   },
+  emits: ['input'],
   methods: {
-    onChange(e: any) {
-      // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
-      // @ts-ignore
-      this.$emit('input', e.target.value);
+    onChange(e: Event) {
+      this.$emit('input', (e.target as HTMLSelectElement).value);
     },
   },
 };
