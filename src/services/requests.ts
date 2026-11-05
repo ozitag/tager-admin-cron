@@ -1,11 +1,11 @@
-import { request, ResponseBody } from '@tager/admin-services';
+import { request, type ResponseBody } from '@tager/admin-services';
 
 import {
-  Command,
-  CommandLog,
-  CronCommand,
-  CronLog,
-  CronLogShort,
+  type Command,
+  type CommandLog,
+  type CronCommand,
+  type CronLog,
+  type CronLogShort,
 } from '../typings/model';
 
 export function getCommandsList(

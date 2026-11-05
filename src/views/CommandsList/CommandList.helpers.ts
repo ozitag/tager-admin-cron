@@ -1,6 +1,6 @@
-import { TFunction } from 'i18next';
+import { type TFunction } from 'i18next';
 
-import { ColumnDefinition } from '@tager/admin-ui';
+import { type ColumnDefinition } from '@tager/admin-ui';
 import { getCommandDetailsUrl } from '../../utils/paths';
 
 export const getColumnDefs = (t: TFunction): Array<ColumnDefinition<any>> => [

@@ -1,4 +1,4 @@
-import { CommandStatus } from '../utils/helper';
+import { type CommandStatus } from '../utils/helper';
 
 export interface CommandLogShort {
   readonly id: number;

@@ -93,7 +93,7 @@ import { Page } from '@tager/admin-layout';
 import { useI18n } from '@tager/admin-services';
 
 import { getCronLogs } from '../../services/requests';
-import { CronLogShort } from '../../typings/model';
+import { type CronLogShort } from '../../typings/model';
 import { getCronDetailsUrl } from '../../utils/paths';
 import EyeIcon from '../../components/EyeIcon/EyeIcon.vue';
 

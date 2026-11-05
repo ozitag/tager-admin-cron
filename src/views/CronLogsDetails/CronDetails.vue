@@ -57,12 +57,12 @@
 import { computed, defineComponent, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 
-import { Nullable, useI18n, useResource } from '@tager/admin-services';
+import { type Nullable, useI18n, useResource } from '@tager/admin-services';
 import { Page } from '@tager/admin-layout';
 import { FieldValue } from '@tager/admin-ui';
 
 import { getCronLogDetails } from '../../services/requests';
-import { CronLog } from '../../typings/model';
+import { type CronLog } from '../../typings/model';
 import CronScreen from '../../components/CronScreen';
 import { getCommandStatusLabel } from '../../utils/helper';
 

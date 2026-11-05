@@ -1,11 +1,11 @@
 import { computed, onMounted, ref } from 'vue';
-import { RouteLocationNormalizedLoaded } from 'vue-router';
+import { type RouteLocationNormalizedLoaded } from 'vue-router';
 
 import { useResource } from '@tager/admin-services';
 import {
   getFilterParamAsStringArray,
   getFilterParams,
-  OptionType,
+  type OptionType,
 } from '@tager/admin-ui';
 
 import { getCronCommandsList } from '../../../services/requests';

@@ -72,7 +72,7 @@ import { Page } from '@tager/admin-layout';
 import { useI18n } from '@tager/admin-services';
 
 import { getCommandsLogs } from '../../services/requests';
-import { CommandLogShort } from '../../typings/model';
+import { type CommandLogShort } from '../../typings/model';
 import { getCommandLogDetailsUrl } from '../../utils/paths';
 import EyeIcon from '../../components/EyeIcon/EyeIcon.vue';
 import { getCommandStatusColor, getCommandStatusLabel } from '../../utils/helper';

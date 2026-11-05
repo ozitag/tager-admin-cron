@@ -25,7 +25,7 @@
 
 <script lang="ts">
 export default {
-  name: 'CronSelect',
+  name: 'CronScreen',
   props: {
     content: {
       type: String,
@@ -33,7 +33,8 @@ export default {
     },
     inputContent: {
       type: String,
-      required: true,
+      required: false,
+      default: '',
     },
     useHtml: {
       type: Boolean,

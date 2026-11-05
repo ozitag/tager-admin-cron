@@ -24,7 +24,7 @@
       <FormFieldOptionsSwitcherTrueFalse v-model:value="async" :label="$i18n.t('cron:runInBackgroundLabel')" :description="$i18n.t('cron:runInBackgroundDescription')" />
 
       <CronScreen
-        :content="response"
+        :content="response ?? ''"
         :use-html="true"
         :use-empty-state="true"
         :input-content="getInputString(command.signature, args)"
@@ -52,7 +52,7 @@ import { useRoute, useRouter } from 'vue-router';
 import { BaseButton, BaseInput, BaseSelect, FormField, FormFieldSingleSelect, FormFooter, FormFieldOptionsSwitcherTrueFalse } from '@tager/admin-ui';
 import {
   navigateBack,
-  Nullable,
+  type Nullable,
   useI18n,
   useResource,
   useToast
@@ -60,7 +60,7 @@ import {
 import { Page } from '@tager/admin-layout';
 
 import { executeCommand, getCommandDetails } from '../../services/requests';
-import { Command } from '../../typings/model';
+import { type Command } from '../../typings/model';
 import CronScreen from '../../components/CronScreen';
 import { getCommandsListUrl, getCommandsLogsUrl } from '../../utils/paths';
 

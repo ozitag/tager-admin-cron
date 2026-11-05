@@ -1,4 +1,4 @@
-import { TranslateFunction } from '@tager/admin-services';
+import { type TranslateFunction } from '@tager/admin-services';
 
 export type CommandStatus = 'STARTED' | 'FAILED' | 'WAITING' | 'COMPLETED' | 'FINISHED';
 

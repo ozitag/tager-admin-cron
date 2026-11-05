@@ -53,11 +53,11 @@ import { computed, defineComponent, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 
 import { FieldValue } from '@tager/admin-ui';
-import { Nullable, useI18n, useResource } from '@tager/admin-services';
+import { type Nullable, useI18n, useResource } from '@tager/admin-services';
 import { Page } from '@tager/admin-layout';
 
 import { getCommandLogDetails } from '../../services/requests';
-import { CommandLog } from '../../typings/model';
+import { type CommandLog } from '../../typings/model';
 import CronScreen from '../../components/CronScreen';
 import { getCommandStatusLabel } from '../../utils/helper';
 

@@ -12,11 +12,18 @@
 </template>
 
 <script lang="ts">
+import type { PropType } from 'vue';
+
+interface CronSelectOption {
+  value: string | number;
+  label: string;
+}
+
 export default {
   name: 'CronSelect',
   props: {
     options: {
-      type: Array,
+      type: Array as PropType<Array<CronSelectOption>>,
       required: true,
     },
   },
