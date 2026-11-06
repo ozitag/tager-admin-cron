@@ -1,6 +1,6 @@
 import { type CommandStatus } from '../utils/helper';
 
-export interface CommandLogShort {
+export type CommandLogShort = {
   readonly id: number;
   readonly signature: string;
   readonly status: CommandStatus;
@@ -17,7 +17,7 @@ export interface CommandLog extends CommandLogShort {
   readonly output: string | null;
 }
 
-export interface CronLogShort {
+export type CronLogShort = {
   readonly id: number;
   readonly command: string;
   readonly status: CommandStatus;
@@ -37,7 +37,7 @@ export interface CronLog extends CronLogShort {
   readonly class: string;
 }
 
-export interface Command {
+export type Command = {
   readonly signature: string;
   readonly description: string | null;
   readonly arguments: Array<CommandArgument>;

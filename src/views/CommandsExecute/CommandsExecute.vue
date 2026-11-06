@@ -15,13 +15,14 @@
           <FormField
             v-else
             :key="argument.name"
+            :name="argument.name"
             v-model:value="argument.value"
             :label="argument.name"
           />
         </div>
       </div>
 
-      <FormFieldOptionsSwitcherTrueFalse v-model:value="async" :label="$i18n.t('cron:runInBackgroundLabel')" :description="$i18n.t('cron:runInBackgroundDescription')" />
+      <FormFieldOptionsSwitcherTrueFalse name="async" v-model:value="async" :label="$i18n.t('cron:runInBackgroundLabel')" :description="$i18n.t('cron:runInBackgroundDescription')" />
 
       <CronScreen
         :content="response ?? ''"
